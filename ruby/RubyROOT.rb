@@ -119,8 +119,15 @@ module Root
           name = leaf.GetName
           type = type_char(leaf.GetTypeName)
           reader.register_branch(name, type)
-          reader.singleton_class.send(:define_method, name.to_sym) do
+          method = "get_value_of_#{name}".to_sym
+          reader.singleton_class.send(:define_method, method) do
             send("get_value_#{type}".to_sym, name)
+          end
+          short_method = name.to_sym
+          unless reader.respond_to?(short_method)
+            reader.singleton_class.class_eval do
+              alias_method(short_method, method)
+            end
           end
         end
       end
@@ -140,8 +147,16 @@ module Root
         else
           writer.register_branch(name, type)
         end
-        writer.singleton_class.send(:define_method, "#{name}=") do |value|
-          self.send("set_value_#{type}", name, value)
+
+        method = "set_value_of_#{name}".to_sym
+        writer.singleton_class.send(:define_method, method) do |value|
+          send("set_value_#{type}", name, value)
+        end
+        short_method = "#{name}=".to_sym
+        unless writer.respond_to?(short_method)
+          writer.singleton_class.class_eval do
+            alias_method(short_method, method)
+          end
         end
       end
       writer.construct_branches()
