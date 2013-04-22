@@ -26,9 +26,9 @@
 ###########################################################################
 require 'root'
 
-module Root
+module RootUtil
   def ROOTApp(init: true, run: false, nowait: false, &block)
-    app = TApplication.new("App", nil, nil) if init
+    app = Root::TApplication.new("App", nil, nil) if init
     yield app if block_given?
     if run
       app.Run
@@ -37,9 +37,10 @@ module Root
     end
   end
 
-  def gDirectory(); TDirectory.CurrentDirectory(); end
-  def gPad(); TVirtualPad.Pad(); end
-  def gROOT(); GetROOT(); end
+  def gDirectory(); Root::TDirectory.CurrentDirectory(); end
+  def gPad(); Root::TVirtualPad.Pad(); end
+  def gROOT(); Root::GetROOT(); end
+  def gStyle(); Root::GetStyle(); end
 
   def type_char(t)
     t = t.to_sym
@@ -51,6 +52,11 @@ module Root
   def func(&f)
     lambda {|x, p| f.(x[0]) }
   end
+end
+
+
+module Root
+  include RootUtil
 
   class TFile
     def self.open(name, option="", &block)
@@ -80,7 +86,7 @@ module Root
       o = self.First
       while o
         yield o
-        o = self.After
+        o = self.After(o)
       end
     end
   end
@@ -116,12 +122,30 @@ module Root
       self.GetListOfBranches.each do |b|
         b.auto_cast.GetListOfLeaves.each do |l|
           leaf = l.cast_to(:TLeaf)
-          name = leaf.GetName
+          name = leaf.GetBranch.auto_cast.GetName
           type = type_char(leaf.GetTypeName)
-          reader.register_branch(name, type)
+          len = leaf.GetLen
+          if lc = leaf.GetLeafCount
+            len = lc.GetMaximum
+          end
+          reader.register_branch(name, type, len)
           method = "get_value_of_#{name}".to_sym
           reader.singleton_class.send(:define_method, method) do
-            send("get_value_#{type}".to_sym, name)
+            if len==1
+              send("get_value_#{type}".to_sym, name)
+            else
+              if type=='F' || type=='D'
+                a = DoubleArray.new(len)
+              else
+                a = IntArray.new(len)
+              end
+              send("get_array_#{type}".to_sym, name, a)
+              if lc
+                a.to_a(send("get_value_of_#{lc.GetName}"))
+              else
+                a.to_a(len)
+              end
+            end
           end
           short_method = name.to_sym
           unless reader.respond_to?(short_method)
@@ -140,17 +164,30 @@ module Root
       branches.each do |k, v|
         name = k.to_s
         type = v[0]
-        if v =~ /\[(\d)\]/
-          l = $1
-          l = 1 if l <= 1
-          writer.register_branch(name, type, l)
+        len = 1
+        if v =~ /\[(\d+)\]/
+          len = $1.to_i
+          len = 1 if len <= 1
+          writer.register_branch(name, type, len)
+        elsif v =~ /\[(.+)\=(\d+)\]/
+          ref = $1
+          len = $2.to_i
+          writer.register_branch(name, type, len, ref)
         else
           writer.register_branch(name, type)
         end
 
         method = "set_value_of_#{name}".to_sym
         writer.singleton_class.send(:define_method, method) do |value|
-          send("set_value_#{type}", name, value)
+          if len==1
+            send("set_value_#{type}".to_sym, name, value)
+          else
+            if type=='F' || type=='D'
+              send("set_array_#{type}".to_sym, name, DoubleArray.from_list(value))
+            else
+              send("set_array_#{type}".to_sym, name, IntArray.from_list(value))
+            end
+          end
         end
         short_method = "#{name}=".to_sym
         unless writer.respond_to?(short_method)
@@ -177,21 +214,37 @@ module Root
     include Enumerable
   end
   
-  def self.define_from_list()
-    def from_list(list)
-      n = list.length
-      array = self.new(n)
-      n.times{|i| array[i] = list[i] }
-      array
+  Module.class_eval do
+    def define_from_list()
+      def self.from_list(list)
+        n = list.length
+        array = self.new(n)
+        n.times{|i| array[i] = list[i] }
+        array
+      end
+      self.singleton_class.class_eval do
+        alias_method(:from_array, :from_list)
+      end
+    end
+
+    def define_to_a()
+      define_method :to_a do |len=nil|
+        len = self.length unless len
+        a = Array.new(len)
+        len.times {|i| a[i] = self[i] }
+        a
+      end
     end
   end
 
   class IntArray
-    Root::define_from_list
+    define_from_list
+    define_to_a
   end
 
   class DoubleArray
-    Root::define_from_list
+    define_from_list
+    define_to_a
   end
 
   class TGraph
@@ -234,11 +287,10 @@ module Root
       end
     end
   end
+end
 
-  ### style, utility graphs
 
-  alias gStyle getStyle
-
+module RootUtil
   PlotColor = [1, 2, 3, 4, 6, 7, 15]
 
   def set_root_style()

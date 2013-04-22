@@ -29,6 +29,7 @@
 #include <TFormula.h>
 #include <TF1.h>
 #include <TFile.h>
+#include <TKey.h>
 #include <TCanvas.h>
 #include <TStyle.h>
 #include <TColor.h>

@@ -434,6 +434,18 @@ public:
   void set_value_D(const std::string& name, Double_t v);
   void set_value_O(const std::string& name, Bool_t v);
 
+  void set_array_B(const std::string& name, int* a);
+  void set_array_S(const std::string& name, int* a);
+  void set_array_I(const std::string& name, int* a);
+  void set_array_L(const std::string& name, int* a);
+  void set_array_b(const std::string& name, int* a);
+  void set_array_s(const std::string& name, int* a);
+  void set_array_i(const std::string& name, int* a);
+  void set_array_l(const std::string& name, int* a);
+  void set_array_F(const std::string& name, double* a);
+  void set_array_D(const std::string& name, double* a);
+  void set_array_O(const std::string& name, int* a);
+
   Char_t get_value_B(const std::string& name);
   Short_t get_value_S(const std::string& name);
   Int_t get_value_I(const std::string& name);
@@ -446,9 +458,21 @@ public:
   Double_t get_value_D(const std::string& name);
   Bool_t get_value_O(const std::string& name);
 
+  void get_array_B(const std::string& name, int* a);
+  void get_array_S(const std::string& name, int* a);
+  void get_array_I(const std::string& name, int* a);
+  void get_array_L(const std::string& name, int* a);
+  void get_array_b(const std::string& name, int* a);
+  void get_array_s(const std::string& name, int* a);
+  void get_array_i(const std::string& name, int* a);
+  void get_array_l(const std::string& name, int* a);
+  void get_array_F(const std::string& name, double* a);
+  void get_array_D(const std::string& name, double* a);
+  void get_array_O(const std::string& name, int* a);
+
   void set_branches();
   void construct_branches();
-  void register_branch(const std::string& name, const std::string& type, size_t length=1);
+  void register_branch(const std::string& name, const std::string& type, size_t length=1, const std::string& leaf_ref="");
 };
 
 }

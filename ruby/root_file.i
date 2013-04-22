@@ -6,7 +6,7 @@ class TDirectoryFile : public TDirectory
 {
 public:
   // TDirectory status bits
-  // enum { kCloseDirectory = BIT(7) };
+  // enum ;;
 
   TDirectoryFile();
   TDirectoryFile(const char *name, const char *title, Option_t *option="", TDirectory* motherDir = 0);
@@ -226,4 +226,57 @@ public:
   static UInt_t       GetOpenTimeout(); // in ms
   static Bool_t       SetOnlyStaged(Bool_t onlystaged);
   static Bool_t       GetOnlyStaged();
+};
+
+
+class TKey : public TNamed {
+public:
+  TKey();
+  TKey(TDirectory* motherDir);
+  TKey(TDirectory* motherDir, const TKey &orig, UShort_t pidOffset);
+  TKey(const char *name, const char *title, const TClass *cl, Int_t nbytes, TDirectory* motherDir = 0);
+  TKey(const TString &name, const TString &title, const TClass *cl, Int_t nbytes, TDirectory* motherDir = 0);
+  TKey(const TObject *obj, const char *name, Int_t bufsize, TDirectory* motherDir = 0);
+  TKey(const void *obj, const TClass *cl, const char *name, Int_t bufsize, TDirectory* motherDir = 0);
+  TKey(Long64_t pointer, Int_t nbytes, TDirectory* motherDir = 0);
+  virtual ~TKey();
+
+  virtual void        Browse(TBrowser *b);
+  virtual void        Delete(Option_t *option="");
+  virtual void        DeleteBuffer();
+  virtual void        FillBuffer(char *&buffer);
+  virtual const char *GetClassName() const ;
+  virtual const char *GetIconName() const;
+  virtual const char *GetTitle() const;
+  virtual char       *GetBuffer() const ;
+  TBuffer    *GetBufferRef() const ;
+  Short_t     GetCycle() const;
+  const   TDatime    &GetDatime() const   ;
+  TFile      *GetFile() const;
+  Short_t     GetKeep() const;
+  Int_t       GetKeylen() const   ;
+  TDirectory* GetMotherDir() const ;
+  Int_t       GetNbytes() const   ;
+  Int_t       GetObjlen() const   ;
+  Int_t       GetVersion() const  ;
+  virtual Long64_t    GetSeekKey() const  ;
+  virtual Long64_t    GetSeekPdir() const ;
+  virtual ULong_t     Hash() const;
+  virtual void        IncrementPidOffset(UShort_t offset);
+  Bool_t      IsFolder() const;
+  virtual void        Keep();
+  virtual void        ls(Option_t *option="") const;
+  virtual void        Print(Option_t *option="") const;
+  virtual Int_t       Read(TObject *obj);
+  virtual TObject    *ReadObj();
+  virtual TObject    *ReadObjWithBuffer(char *bufferRead);
+  virtual void       *ReadObjectAny(const TClass *expectedClass);
+  virtual void        ReadBuffer(char *&buffer);
+  void        ReadKeyBuffer(char *&buffer);
+  virtual Bool_t      ReadFile();
+  virtual void        SetBuffer() ;
+  virtual void        SetParent(const TObject *parent);
+  void        SetMotherDir(TDirectory* dir) ;
+  virtual Int_t       Sizeof() const;
+  virtual Int_t       WriteFile(Int_t cycle=1, TFile* f = 0);
 };
