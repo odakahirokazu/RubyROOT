@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
 
 require 'RubyROOT'
-include Root
 
-TFile.open("data.root", "RECREATE") do
-  tree = TTree.create("tree", "tree")
+Root::TFile.open("tree.root", "RECREATE") do
+  tree = Root::TTree.create("tree", "tree")
   row = tree.define(event_id: 'I', position: 'F', energy: 'F')
   30.times {|i|
     row.event_id = i+1

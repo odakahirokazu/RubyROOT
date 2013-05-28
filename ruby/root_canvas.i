@@ -278,7 +278,7 @@ public:
   TCanvas(const char *name, Int_t ww, Int_t wh, Int_t winid);
 
   %extend {
-    static TCanvas* create(const char *name, const char *title="", Int_t form=1)
+    static TCanvas* create(const char *name="c1", const char *title="", Int_t form=1)
     {
       return new TCanvas(name, title, form);
     }

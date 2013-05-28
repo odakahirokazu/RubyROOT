@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'RubyROOT'
-include Root
 
-TFile.open("test5.root", "RECREATE") do
-  tree = TTree.create("tree", "tree")
-  io = TreeIOHelper.new(tree)
+Root::TFile.open("tree_basic.root", "RECREATE") do
+  tree = Root::TTree.create("tree", "tree")
+  io = Root::TreeIOHelper.new(tree)
   
   io.register_branch("eventid", "I")
   io.register_branch("energy", "D")
@@ -22,4 +21,3 @@ TFile.open("test5.root", "RECREATE") do
   
   tree.Write
 end
-

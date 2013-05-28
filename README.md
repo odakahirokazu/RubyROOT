@@ -1,22 +1,25 @@
 RubyROOT
-================================================================
+========================================================================
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.0
+- Version: 0.1
 - Author: Hirokazu Odaka
 
 
  1. Introduction
----------------------------------------------------------------
+-----------------------------------------------------------------------
 
-RubyROOT is a Ruby binding of CERN ROOT Analysis Framework.
-RubyROOT provides a minimun set of Ruby interface to useful
-ROOT classes including histograms, tree, graphs, and canvases.
+RubyROOT is a Ruby binding of CERN ROOT Analysis Framework. RubyROOT
+provides a minimun set of Ruby interface to useful ROOT classes
+including histograms, tree, graphs, and canvases.
 
+ROOT already has a well-designed Ruby binding, "RootRoot", in the
+package. But this seems not possible to be built with Ruby 2.0. Thus,
+we have started developing of this library.
 
  2. Information
----------------------------------------------------------------
+-----------------------------------------------------------------------
 
 ### (1) Contact
 
@@ -34,31 +37,33 @@ https://github.com/odakahirokazu/RubyROOT/
 
 
  3. Supported System
----------------------------------------------------------------
+-----------------------------------------------------------------------
 
 - Mac OS X (the author's standard environment)
 - Linux (probably)
 
 
  4. Required software
----------------------------------------------------------------
+-----------------------------------------------------------------------
 
 ### (1) C++ compliler
 
-### (2) [CMake] (http://www.cmake.org/) (Cross platform make)
-[version 2.8 or later]  
-For easy installation, this package uses CMake to generate building tools such as Makefile.
+### (2) [CMake](http://www.cmake.org/) (Cross platform make)
+*version 2.8 or later*
+For easy installation, this package uses CMake to generate building
+tools such as Makefile.
 
-### (3) [Ruby] (http://www.ruby-lang.org/en/)
-[version 2.0]  
+### (3) [Ruby](http://www.ruby-lang.org/en/)
+*version 2.0*
 Ruby 2.0 is required.
 
-### (4) [SWIG] (http://www.swig.org/) (Simplified Wrapper and Interface Generator)
-[version 2.0 or later]  
-SWIG provides an easy way to generate extended libraries of various scripting languages.
+### (4)[SWIG](http://www.swig.org/) (Simplified Wrapper and Interface Generator)
+*version 2.0 or later*
+SWIG provides an easy way to generate extended libraries of various
+scripting languages.
 
-### (5) [ROOT] (http://root.cern.ch/)
-[version 5.34 or later]  
+### (5) [ROOT](http://root.cern.ch/)
+*version 5.34 or later*
 A data analysis framework.
 
 

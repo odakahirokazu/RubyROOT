@@ -59,8 +59,8 @@ public:
   Int_t                   Debug() const ;
   virtual void            Delete(Option_t* option = ""); // *MENU*
   virtual void            Draw(Option_t* opt) ;
-  virtual Long64_t        Draw(const char* varexp, const TCut& selection, Option_t* option = "", Long64_t nentries = 1000000000, Long64_t firstentry = 0);
-  virtual Long64_t        Draw(const char* varexp, const char* selection, Option_t* option = "", Long64_t nentries = 1000000000, Long64_t firstentry = 0); // *MENU*
+  // virtual Long64_t        Draw(const char* varexp, const TCut& selection, Option_t* option = "", Long64_t nentries = 1000000000, Long64_t firstentry = 0);
+  virtual Int_t           Draw(const char* varexp, const char* selection, Option_t* option="", Long64_t nentries=1000000000, Long64_t firstentry=0); // *MENU*
   virtual void            DropBaskets();
   virtual void            DropBuffers(Int_t nbytes);
   virtual Int_t           Fill();

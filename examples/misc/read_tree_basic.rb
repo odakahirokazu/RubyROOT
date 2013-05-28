@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'RubyROOT'
-include Root
 
-TFile.open("test5.root") do |f|
+Root::TFile.open("tree_basic.root") do |f|
   tree = f.Get("tree")
-  tree.SetDirectory gDirectory
-  io = TreeIOHelper.new(tree)
+  tree.SetDirectory Root.gDirectory
+  io = Root::TreeIOHelper.new(tree)
   io.register_branch("eventid", "I")
   io.register_branch("energy", "D")
   io.set_branches

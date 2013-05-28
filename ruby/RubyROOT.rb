@@ -24,19 +24,10 @@
 #   Date: 2013-04-01                                                      #
 #                                                                         #
 ###########################################################################
+
 require 'root'
 
 module RootUtil
-  def ROOTApp(init: true, run: false, nowait: false, &block)
-    app = Root::TApplication.new("App", nil, nil) if init
-    yield app if block_given?
-    if run
-      app.Run
-    else
-      say_wait() unless nowait
-    end
-  end
-
   def gDirectory(); Root::TDirectory.CurrentDirectory(); end
   def gPad(); Root::TVirtualPad.Pad(); end
   def gROOT(); Root::GetROOT(); end
@@ -52,11 +43,39 @@ module RootUtil
   def func(&f)
     lambda {|x, p| f.(x[0]) }
   end
+
+  module_function :gDirectory, :gPad, :gROOT, :gStyle, :type_char, :func
+end
+
+
+module RootApp
+  Thread.new do
+    @@app = Root::TApplication.new("App", nil, nil)
+  end
+
+  def wait_root(run=false)
+    if run
+      puts 'To quit: please select "Quit ROOT" from the pulldown menu "File"'
+      @@app.Run
+    else
+      puts "press <return> key to quit"
+      dummy = STDIN.gets
+    end
+  end
+
+  module_function :wait_root
 end
 
 
 module Root
+  module_function :GetROOT, :GetStyle
+
   include RootUtil
+  module_function :gDirectory, :gPad, :gROOT, :gStyle, :type_char, :func
+  # module_function :create_square_canvas
+
+  include RootApp
+  module_function :wait_root
 
   class TFile
     def self.open(name, option="", &block)
@@ -73,7 +92,7 @@ module Root
 
   module TObject::Impl
     def cast_to(class_name)
-      send(:"castInto#{class_name}", self)
+      Root::send(:"castInto#{class_name}", self)
     end
 
     def auto_cast()
@@ -109,21 +128,18 @@ module Root
 
   module TDirectory::Impl
     def Get(name)
-      obj = self.GetTObject(name).auto_cast
-      obj.SetDirectory(nil) if obj.respond_to?(:SetDirectory)
-      obj
+      self.GetTObject(name).auto_cast
     end
   end
 
   module TTree::Impl
     def read()
-      self.SetDirectory Root::TDirectory.CurrentDirectory()
       reader = TreeIOHelper.new(self)
       self.GetListOfBranches.each do |b|
         b.auto_cast.GetListOfLeaves.each do |l|
           leaf = l.cast_to(:TLeaf)
           name = leaf.GetBranch.auto_cast.GetName
-          type = type_char(leaf.GetTypeName)
+          type = RootUtil::type_char(leaf.GetTypeName)
           len = leaf.GetLen
           if lc = leaf.GetLeafCount
             len = lc.GetMaximum
@@ -287,102 +303,115 @@ module Root
       end
     end
   end
+
+  class TStyle
+    def set_my_style()
+      SetOptStat(0)
+      SetOptTitle(0)
+      SetDrawBorder(0)
+      SetCanvasBorderMode(0)
+      SetCanvasBorderSize(0)
+      SetCanvasColor(10)
+      SetPadBorderMode(0)
+      SetPadBorderSize(0)
+      SetPadColor(10)
+      SetFrameBorderMode(0)
+      SetFrameBorderSize(0)
+      SetFrameFillColor(10)
+      SetLabelFont(42, "XYZ")
+      SetTitleFont(42, "XYZ")
+      SetEndErrorSize(0)
+    end
+
+    def set_palette(name, reverse=false)
+      num = 999
+      
+      if name == 'b'
+        s = [0.0, 0.25, 0.5, 0.75, 1.0]
+        r = [0.0, 0.0,  1.0, 1.0,  1.0]
+        g = [0.0, 0.0,  0.0, 1.0,  1.0]
+        b = [0.0, 1.0,  0.0, 0.0,  1.0]
+      elsif name == 'heat'
+        s = [0.0, 1.0/3.0, 2.0/3.0, 1.0]
+        r = [0.0, 1.0,   1.0,   1.0]
+        g = [0.0, 1.0/3.0, 2.0/3.0, 1.0]
+        b = [0.0, 0.0,   0.0,   1.0]
+      elsif name == 'cool'
+        s = [0.0, 1.0/3.0, 2.0/3.0, 1.0]
+        r = [0.0, 0.0,   0.0,   1.0]
+        g = [0.0, 1.0/3.0, 2.0/3.0, 1.0]
+        b = [0.0, 1.0,   1.0,   1.0]
+      elsif name == 'red'
+        s = [0.0, 1.0]
+        r = [0.0, 1.0]
+        g = [0.0, 0.0]
+        b = [0.0, 0.0]
+      elsif name == 'green'
+        s = [0.0, 1.0]
+        r = [0.0, 0.0]
+        g = [0.0, 1.0]
+        b = [0.0, 0.0]
+      elsif name == 'blue'
+        s = [0.0, 1.0]
+        r = [0.0, 0.0]
+        g = [0.0, 0.0]
+        b = [0.0, 1.0]
+      elsif name == 'wred'
+        s = [0.0, 1.0]
+        r = [1.0, 1.0]
+        g = [1.0, 0.0]
+        b = [1.0, 0.0]
+      elsif name == 'wgreen'
+        s = [0.0, 1.0]
+        r = [1.0, 0.0]
+        g = [1.0, 1.0]
+        b = [1.0, 0.0]
+      elsif name == 'wblue'
+        s = [0.0, 1.0]
+        r = [1.0, 0.0]
+        g = [1.0, 0.0]
+        b = [1.0, 1.0]
+      elsif name == 'gray' || name == 'g'
+        s = [0.0, 1.0]
+        r = [1.0, 0.0]
+        g = [1.0, 0.0]
+        b = [1.0, 0.0]
+      elsif name == 'rg'
+        s = [0.0, 1.0]
+        r = [0.0, 1.0]
+        g = [0.0, 1.0]
+        b = [0.0, 1.0]
+      else
+        return
+      end
+      
+      if reverse
+        r.reverse!
+        g.reverse!
+        b.reverse!
+      end
+      
+      TColor::CreateGradientColorTable(s.length,
+                                       DoubleArray.from_array(s),
+                                       DoubleArray.from_array(r),
+                                       DoubleArray.from_array(g),
+                                       DoubleArray.from_array(b),
+                                       num)
+      SetNumberContours(num)
+    end
+  end
+
+  class TCanvas
+    def self.create_square(size=600, name='c1', title='c1')
+      wx = size+4
+      wy = size+4+24
+      self.create(name, title, wx, wy)
+    end
+  end
 end
 
 
 module RootUtil
-  PlotColor = [1, 2, 3, 4, 6, 7, 15]
-
-  def set_root_style()
-    gStyle.SetOptStat(0)
-    gStyle.SetOptTitle(0)
-    gStyle.SetDrawBorder(0)
-    gStyle.SetCanvasBorderMode(0)
-    gStyle.SetCanvasBorderSize(0)
-    gStyle.SetCanvasColor(10)
-    gStyle.SetPadBorderMode(0)
-    gStyle.SetPadBorderSize(0)
-    gStyle.SetPadColor(10)
-    gStyle.SetFrameBorderMode(0)
-    gStyle.SetFrameBorderSize(0)
-    gStyle.SetFrameFillColor(10)
-    gStyle.SetLabelFont(42, "XYZ")
-    gStyle.SetTitleFont(42, "XYZ")
-    gStyle.SetEndErrorSize(0)
-  end
-
-  def set_palette(name, reverse=false)
-    num = 999
-    
-    if name == 'b'
-      s = [0.0, 0.25, 0.5, 0.75, 1.0]
-      r = [0.0, 0.0,  1.0, 1.0,  1.0]
-      g = [0.0, 0.0,  0.0, 1.0,  1.0]
-      b = [0.0, 1.0,  0.0, 0.0,  1.0]
-    elsif name == 'heat'
-      s = [0.0, 1.0/3.0, 2.0/3.0, 1.0]
-      r = [0.0, 1.0,   1.0,   1.0]
-      g = [0.0, 1.0/3.0, 2.0/3.0, 1.0]
-      b = [0.0, 0.0,   0.0,   1.0]
-    elsif name == 'cool'
-      s = [0.0, 1.0/3.0, 2.0/3.0, 1.0]
-      r = [0.0, 0.0,   0.0,   1.0]
-      g = [0.0, 1.0/3.0, 2.0/3.0, 1.0]
-      b = [0.0, 1.0,   1.0,   1.0]
-    elsif name == 'red'
-      s = [0.0, 1.0]
-      r = [0.0, 1.0]
-      g = [0.0, 0.0]
-      b = [0.0, 0.0]
-    elsif name == 'green'
-      s = [0.0, 1.0]
-      r = [0.0, 0.0]
-      g = [0.0, 1.0]
-      b = [0.0, 0.0]
-    elsif name == 'blue'
-      s = [0.0, 1.0]
-      r = [0.0, 0.0]
-      g = [0.0, 0.0]
-      b = [0.0, 1.0]
-    elsif name == 'wred'
-      s = [0.0, 1.0]
-      r = [1.0, 1.0]
-      g = [1.0, 0.0]
-      b = [1.0, 0.0]
-    elsif name == 'wgreen'
-      s = [0.0, 1.0]
-      r = [1.0, 0.0]
-      g = [1.0, 1.0]
-      b = [1.0, 0.0]
-    elsif name == 'wblue'
-      s = [0.0, 1.0]
-      r = [1.0, 0.0]
-      g = [1.0, 0.0]
-      b = [1.0, 1.0]
-    elsif name == 'gray' || name == 'g'
-      s = [0.0, 1.0]
-      r = [1.0, 0.0]
-      g = [1.0, 0.0]
-      b = [1.0, 0.0]
-    elsif name == 'rg'
-      s = [0.0, 1.0]
-      r = [0.0, 1.0]
-      g = [0.0, 1.0]
-      b = [0.0, 1.0]
-    else
-      return
-    end
-    
-    if reverse
-      r.reverse!
-      g.reverse!
-      b.reverse!
-    end
-    
-    TColor::CreateGradientColorTable(s.length, s, r, g, b, num)
-    gStyle.SetNumberContours(num)
-  end
-  
   class MultiGraph
     def initialize()
       @graph_list = []
@@ -502,16 +531,5 @@ module RootUtil
       }
       return @canvas
     end
-  end
-
-  def say_wait()
-    puts "press <return> key to quit"
-    dummy = STDIN.gets
-  end
-  
-  def create_square_canvas(name, size=600, title='')
-    wx = size+4
-    wy = size+4+24
-    TCanvas.create(name, title, wx, wy)
   end
 end

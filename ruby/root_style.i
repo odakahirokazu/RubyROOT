@@ -258,7 +258,7 @@ public:
 };
 
 %inline {
-  TStyle* getStyle()
+  TStyle* GetStyle()
   {
     return gStyle;
   }

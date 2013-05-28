@@ -3,11 +3,10 @@
 require 'RubyROOT'
 include RootApp
 
-sin = lambda{|x, p| Math::sin(x[0]) }
-
+f = Root::TFile.new('hist.root')
 c1 = Root::TCanvas.create("c1", "c1", 600, 400)
-f = Root::TF1.create("func", sin, 0, 2*Math::PI, 1)
-f.Draw
+h = f.Get('hist')
+h.Draw
 c1.Update
-
-wait_root
+wait_root true
+f.Close
