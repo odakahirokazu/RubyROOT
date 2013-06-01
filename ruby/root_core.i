@@ -371,3 +371,4 @@ public:
 namespace ROOT {
 TROOT *GetROOT();
 }
+

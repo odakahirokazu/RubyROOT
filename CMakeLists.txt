@@ -17,14 +17,18 @@ message("-- Install destination prefix: ${CMAKE_INSTALL_PREFIX}")
 ### External libraries
 ### ROOT ###
 set(ROOTSYS $ENV{ROOTSYS})
-# set(ROOTDIR "/root")
-set(ROOTDIR "")
-set(ROOT_INC_DIR ${ROOTSYS}/include${ROOTDIR})
-set(ROOT_LIB_DIR ${ROOTSYS}/lib${ROOTDIR})
+find_path(ROOT_INC_DIR
+  NAMES TH1.h TTree.h
+  PATHS ${ROOTSYS}/include/root ${ROOTSYS}/include)
+find_path(ROOT_LIB_DIR
+  NAMES libHist.so libTree.so
+  PATHS ${ROOTSYS}/lib/root ${ROOTSYS}/lib)
 set(ROOT_LIB
   Core Cint RIO Net Hist Graf Graf3d Gpad Tree
   Rint Postscript Matrix Physics MathCore Thread)
 message("-- ROOTSYS = ${ROOTSYS}")
+message("-- ROOT_INC_DIR = ${ROOT_INC_DIR}")
+message("-- ROOT_LIB_DIR = ${ROOT_LIB_DIR}")
 
 ### subdirecties
 add_subdirectory(ruby)

@@ -35,6 +35,7 @@
 #include <TColor.h>
 #include <TRandom.h>
 #include <TRandom3.h>
+#include <TObjString.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
@@ -64,3 +65,4 @@
 %include "root_style.i"
 %include "root_cast.i"
 %include "root_random.i"
+%include "root_string.i"

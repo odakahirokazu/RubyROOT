@@ -302,6 +302,12 @@ module Root
         TGraphAsymmErrors.new(x.size, ax, ay)
       end
     end
+
+    module TObjString::Impl
+      def to_s()
+        self.String.Data()
+      end
+    end
   end
 
   class TStyle
@@ -435,7 +441,7 @@ module RootUtil
       numPlot = @graph_list.size
       canvasHeight = wy*numPlot+2*margin
       @canvas = TCanvas.create(name, '', wx, canvasHeight)
-      set_root_style()
+      RootUtil::gStyle.set_my_style()
       small = 1e-5
       @canvas.Divide(1, numPlot, small, small)
       
