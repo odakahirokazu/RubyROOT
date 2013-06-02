@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1
+- Version: 0.1.2
 - Author: Hirokazu Odaka
 
 
@@ -167,6 +167,6 @@ library will be installed in `$HOME/lib/ruby`.
 
 ### (8) Fun!
 
-There are some example scripts using RubyROOT in `examples` directory.
+You can find example scripts using RubyROOT in `examples` directory.
 
 ****************************************************************

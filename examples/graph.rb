@@ -17,4 +17,4 @@ c1.Update
 f.Write
 f.Close
 
-run_root
+wait_root

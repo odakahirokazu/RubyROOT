@@ -13,6 +13,7 @@ set(CMAKE_C_FLAGS_RELEASE "-O3 -W -Wall" CACHE STRING "C_FLAGS for release")
 ### Definition of project
 project(RubyROOT)
 message("-- Install destination prefix: ${CMAKE_INSTALL_PREFIX}")
+set(CMAKE_MODULE_PATH ${RubyROOT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 ### External libraries
 ### ROOT ###
