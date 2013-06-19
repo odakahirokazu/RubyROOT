@@ -21,48 +21,84 @@
 
 /**
  * @author Hirokazu Odaka
- * @date 2013-04-03
+ * @date 2013-06-13
  **/
 
-#ifndef RUBYROOT_RubyFunctionObject_H
-#define RUBYROOT_RubyFunctionObject_H 1
+#ifndef RUBYROOT_Minuit2FunctionMinimizer_H
+#define RUBYROOT_Minuit2FunctionMinimizer_H 1
 
 #include <ruby.h>
+#include <Math/IFunction.h>
+#include <Minuit2/Minuit2Minimizer.h>
 
 namespace rubyroot {
 
-class RubyFunctionObject
+class RubyIMultiGenFunction : public ROOT::Math::IMultiGenFunction
 {
 public:
-  RubyFunctionObject(VALUE o, int np, int nx=1)
-    : obj(o), num_param(np), num_x(nx)
-  {
-  }
+  RubyIMultiGenFunction(VALUE o, int nx)
+    : obj(o), num_x(nx) {}
+  
+  RubyIMultiGenFunction(const RubyIMultiGenFunction& r)
+    : obj(r.obj), num_x(r.num_x) {}
+  
+  ~RubyIMultiGenFunction() {}
 
-  double operator() (double *x, double *p) const
+  IBaseFunctionMultiDim* Clone() const
+  { return new RubyIMultiGenFunction(*this); }
+  
+  unsigned int NDim() const { return num_x; }
+
+private:
+  virtual double DoEval(const double* x) const
   {
     ID method = rb_intern("call");
     VALUE arg0 = rb_ary_new();
     for (int i=0; i<num_x; i++) {
       rb_ary_push(arg0, rb_float_new(x[i]));
     }
-    VALUE arg1 = rb_ary_new();
-    for (int i=0; i<num_param; i++) {
-      rb_ary_push(arg1, rb_float_new(p[i]));
-    }
-    VALUE ret = rb_funcall(obj, method, 2, arg0, arg1);
-    return NUM2DBL(ret);
+    VALUE ret = rb_funcall(obj, method, 1, arg0);
+    return NUM2DBL(ret);    
   }
-
-  int NumberOfParameters() const { return num_param; }
-  int NumberOfVariables() const { return num_x; }
-
+  
 private:
   VALUE obj;
-  int num_param;
   int num_x;
+};
+
+
+class Minuit2FunctionMinimizer : public ROOT::Minuit2::Minuit2Minimizer
+{
+public:
+  Minuit2FunctionMinimizer(ROOT::Minuit2::EMinimizerType type=ROOT::Minuit2::kMigrad)
+    : Minuit2Minimizer(type), _function(0) {}
+  
+  Minuit2FunctionMinimizer(const char* type)
+    : Minuit2Minimizer(type), _function(0) {}
+  
+  virtual ~Minuit2FunctionMinimizer()
+  {
+    if (_function) {
+      delete _function;
+      _function = 0;
+    }
+  }
+
+  virtual void SetFunctionObject(VALUE func, int nx)
+  {
+    if (_function) {
+      delete _function;
+      _function = 0;
+    }
+    
+    _function = new rubyroot::RubyIMultiGenFunction(func, nx);
+    this->SetFunction(*_function);
+  }
+
+private:
+  rubyroot::RubyIMultiGenFunction* _function;
 };
 
 }
 
-#endif // RUBYROOT_RubyFunctionObject_H
+#endif // RUBYROOT_Minuit2FunctionMinimizer_H

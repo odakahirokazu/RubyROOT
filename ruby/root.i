@@ -10,6 +10,7 @@
 #include <TNamed.h>
 #include <TDirectory.h>
 #include <TROOT.h>
+#include <TMath.h>
 #include <TCollection.h>
 #include <TSeqCollection.h>
 #include <TList.h>
@@ -36,9 +37,13 @@
 #include <TRandom.h>
 #include <TRandom3.h>
 #include <TObjString.h>
+#include <Math/Minimizer.h>
+#include <Minuit2/Minuit2Minimizer.h>
+#include <Math/MinimizerOptions.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
+#include "Minuit2FunctionMinimizer.hpp"
   %}
 
 %include <std_string.i>
@@ -50,6 +55,7 @@
 
 %include "root_types.i"
 %include "root_core.i"
+%include "root_math.i"
 %include "root_list.i"
 %include "root_attributes.i"
 %include "root_axis.i"
@@ -66,3 +72,4 @@
 %include "root_cast.i"
 %include "root_random.i"
 %include "root_string.i"
+%include "root_minuit2.i"

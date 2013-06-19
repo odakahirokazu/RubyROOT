@@ -414,6 +414,19 @@ module Root
       self.create(name, title, wx, wy)
     end
   end
+
+  class Minuit2FunctionMinimizer
+    def function(func=nil, &block)
+      f = func || (block_given? ? block : nil)
+      if f
+        @function = lambda{|x| f.(*x)}
+        nx = f.arity
+        SetFunctionObject(@function, nx)
+      end
+    end
+    
+    def get_fcn(); @function; end
+  end
 end
 
 

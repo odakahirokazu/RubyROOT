@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.2
+- Version: 0.1.3
 - Author: Hirokazu Odaka
 
 
@@ -14,7 +14,7 @@ RubyROOT is a Ruby binding of CERN ROOT Analysis Framework. RubyROOT provides a
 minimun set of Ruby interface to useful ROOT classes including histograms,
 tree, graphs, and canvases.
 
-ROOT already has a well-designed Ruby binding, "RootRoot", in the package. But
+ROOT already has a well-designed Ruby binding, "RubyRoot", in the package. But
 this seems not possible to be built with Ruby 2.0. Thus, we have started
 developing of this library.
 
@@ -37,7 +37,7 @@ TStyle, TTree, TVirtualPad.
 - ISAS/JAXA
 - odaka(AT)astro.isas.jaxa.jp
 
-### (2) Git Hub
+### (2) GitHub
 
 https://github.com/odakahirokazu/RubyROOT/
 
@@ -55,7 +55,7 @@ same software descibed below and please try the same way. It might be necessary
 to modify CMake files in this package.
 
 
- 4. Required software
+ 4. Required Software
 ----------------------------------------------------------------
 
 ### (1) C++ compliler

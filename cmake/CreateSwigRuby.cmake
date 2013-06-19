@@ -51,10 +51,13 @@ link_directories(
   )
 
 set(CMAKE_SWIG_FLAGS "")
+
 set_source_files_properties(${SWIG_IF_FILE} PROPERTIES CPLUSPLUS ON)
 if(SWIG_FLAGS)
-  set_source_files_properties(${SWIG_IF_FILE}
-    PROPERTIES SWIG_FLAGS ${SWIG_FLAGS})
+  foreach(s ${SWIG_FLAGS})
+    set(sflags ${sflags} ${s})
+  endforeach()
+  set_source_files_properties(${SWIG_IF_FILE} PROPERTIES SWIG_FLAGS "${sflags}")
 endif()
 
 swig_add_module(${TARGET_EXT_LIBRARY} ruby ${SWIG_IF_FILE})

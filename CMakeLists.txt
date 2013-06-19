@@ -26,7 +26,8 @@ find_path(ROOT_LIB_DIR
   PATHS ${ROOTSYS}/lib/root ${ROOTSYS}/lib)
 set(ROOT_LIB
   Core Cint RIO Net Hist Graf Graf3d Gpad Tree
-  Rint Postscript Matrix Physics MathCore Thread)
+  Rint Postscript Matrix Physics MathCore Thread
+  Minuit2)
 message("-- ROOTSYS = ${ROOTSYS}")
 message("-- ROOT_INC_DIR = ${ROOT_INC_DIR}")
 message("-- ROOT_LIB_DIR = ${ROOT_LIB_DIR}")
