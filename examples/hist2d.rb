@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'RubyROOT'
+include RootApp
 
 Root::gStyle.set_palette 'g'
 
@@ -21,4 +22,4 @@ end
 h.Draw 'colz'
 c1.Update
 
-Root::wait_root true
+wait_root true

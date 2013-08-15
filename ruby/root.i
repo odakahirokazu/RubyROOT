@@ -40,6 +40,9 @@
 #include <Math/Minimizer.h>
 #include <Minuit2/Minuit2Minimizer.h>
 #include <Math/MinimizerOptions.h>
+#include <TLine.h>
+#include <TBox.h>
+#include <TEllipse.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
@@ -47,7 +50,7 @@
   %}
 
 %include <std_string.i>
-%include <std_vector.i>
+ //%include <std_vector.i>
 %include <carrays.i>
 
 %array_class(int, IntArray)
@@ -64,6 +67,7 @@
 %include "root_hist2d.i"
 %include "root_hist3d.i"
 %include "root_tree.i"
+%include "root_graf.i"
 %include "root_graph.i"
 %include "root_func.i"
 %include "root_file.i"

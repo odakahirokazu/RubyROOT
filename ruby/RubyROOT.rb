@@ -49,8 +49,17 @@ end
 
 
 module RootApp
-  Thread.new do
-    @@app = Root::TApplication.new("App", nil, nil)
+  @@app = nil
+
+  def self.included(mod)
+    unless @@app
+      @@app = Root::TApplication.new("App", nil, nil)
+      # puts '@@app initialized'
+    end
+  end
+
+  def get_app()
+    @@app
   end
 
   def wait_root(run=false)
@@ -63,7 +72,7 @@ module RootApp
     end
   end
 
-  module_function :wait_root
+  module_function :wait_root, :get_app
 end
 
 
@@ -72,10 +81,6 @@ module Root
 
   include RootUtil
   module_function :gDirectory, :gPad, :gROOT, :gStyle, :type_char, :func
-  # module_function :create_square_canvas
-
-  include RootApp
-  module_function :wait_root
 
   class TFile
     def self.open(name, option="", &block)

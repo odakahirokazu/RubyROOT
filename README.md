@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.3
+- Version: 0.1.4
 - Author: Hirokazu Odaka
 
 
@@ -20,10 +20,11 @@ developing of this library.
 
 Currently, this Ruby wapper offers the following ROOT classes:  
 TApplication, TAttAxis, TAttFill, TAttLine, TAttMarker, TAttPad, TAttText,
-TAxis, TBranch, TCanvas, TChain, TCollection, TColor, TDirectory,
-TDirectoryFile, TF1, TFile, TFormula, TGraph, TGraphAsymmErrors, TGraphErrors,
+TAxis, TBox, TBranch, TCanvas, TChain, TCollection, TColor, TDirectory,
+TDirectoryFile, TEllipse, TF1, TFile, TFormula,
+TGraph, TGraphAsymmErrors, TGraphErrors,
 TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I, TH2S, TH3,
-TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLeaf, TList, TNamed, TObjArray,
+TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLeaf, TLine, TList, TNamed, TObjArray,
 TObjString, TObject, TPad, TROOT, TRandom, TRandom3, TSeqCollection, TString,
 TStyle, TTree, TVirtualPad.
 
@@ -78,7 +79,7 @@ SWIG provides an easy way to generate extended libraries of various scripting
 languages.
 
 ### (5) [ROOT](http://root.cern.ch/)
-*version 5.34.05 or later*
+*version 5.34.09 or later*
 
 A data analysis framework.
 
@@ -122,21 +123,17 @@ This will show like this =>
       1.8.6-p420
       1.8.7-p249
       ...
-      1.9.3-p392
-      1.9.3-preview1
-      1.9.3-rc1
-      2.0.0-dev
       2.0.0-p0
+      2.0.0-p195
+      2.0.0-p247
       2.0.0-preview1
-      2.0.0-preview2
       ...
 
-Then, select the latest stable version: 2.0.0-p0, for example.
-(You can select 2.0.0-p0 or later.)
+Then, select the latest stable version: 2.0.0-p247, for example.
 
-    unix> rbenv install 2.0.0-p0
+    unix> rbenv install 2.0.0-p247
     unix> rbenv rehash
-    unix> rbenv global 2.0.0-p0
+    unix> rbenv global 2.0.0-p247
 
 ### (4) Install ROOT.
 
