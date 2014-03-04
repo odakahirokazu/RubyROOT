@@ -3,9 +3,9 @@
 require 'RubyROOT'
 
 Root::TFile.open('hist.root', 'RECREATE') do
-  h = Root::TH1D.create('hist', 'Histogram', 100, 0.0, 100.0)
-  h.SetBinContent(12, 4.2)
-  1.upto(h.GetNbinsX) {|i| h.SetBinContent(i, i*10.0) }
-  1000.times {|i| h.Fill(12.5) }
+  h = Root::TH1D.create('hist', 'Histogram', 100, -5.0, 5.0)
+  1.upto(h.GetNbinsX){|i| h.SetBinContent(i, i*4.0) }
+  h.SetBinContent(32, 547.2)
+  h.FillRandom("gaus", 15000)
   h.Write
 end

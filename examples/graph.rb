@@ -3,7 +3,7 @@
 require 'RubyROOT'
 include RootApp
 
-f = Root::TFile.open("test4.root", "RECREATE")
+f = Root::TFile.open("graph.root", "RECREATE")
 x = [100.0, 200.0, 300.0]
 y = x.map{|z|z*2}
 xe = x.map{|z|Math.sqrt(z)}
@@ -17,4 +17,4 @@ c1.Update
 f.Write
 f.Close
 
-wait_root
+run_app

@@ -72,7 +72,9 @@ module RootApp
     end
   end
 
-  module_function :wait_root, :get_app
+  def run_app(run=true); wait_root(run); end
+
+  module_function :wait_root, :get_app, :run_app
 end
 
 
@@ -266,6 +268,7 @@ module Root
   class DoubleArray
     define_from_list
     define_to_a
+    def to_double_array(); self; end
   end
 
   class TGraph
@@ -273,7 +276,7 @@ module Root
       n = x.length
       ax = DoubleArray.from_list(x)
       ay = DoubleArray.from_list(y)
-      TGraphErrors.new(x.size, ax, ay)
+      TGraph.new(x.size, ax, ay)
     end
   end
 
@@ -291,7 +294,7 @@ module Root
       end
     end
   end
-  
+
   class TGraphAsymmErrors
     def self.create(x, y, xerrl=nil, xerrh=nil, yerrl=nil, yerrh=nil)
       n = x.length
@@ -458,7 +461,7 @@ module RootUtil
     def draw(name, wx, wy, margin=50)
       numPlot = @graph_list.size
       canvasHeight = wy*numPlot+2*margin
-      @canvas = TCanvas.create(name, '', wx, canvasHeight)
+      @canvas = Root::TCanvas.create(name, '', wx, canvasHeight)
       RootUtil::gStyle.set_my_style()
       small = 1e-5
       @canvas.Divide(1, numPlot, small, small)
@@ -469,28 +472,28 @@ module RootUtil
       padY1 = 1.0-padMargin-padHeight
       
       numPlot.times{|i|
-        @canvas.cd(i+1)
+        pad = @canvas.cd(i+1)
         padY1 = 0.0 if i==numPlot-1
-        gPad.SetPad(0.0, padY1, 1.0, padY2)
-        # gPad.SetFillStyle(4000)
-        gPad.SetFillColor(0)
-        gPad.SetFrameFillColor(0)
+        pad.SetPad(0.0, padY1, 1.0, padY2)
+        # pad.SetFillStyle(4000)
+        pad.SetFillColor(0)
+        pad.SetFrameFillColor(0)
         
         graph = @graph_list[i][0]
         option = @graph_list[i][1]
         title = @graph_list[i][2]
         yRange = @graph_list[i][3]
         if i==0
-          gPad.SetTopMargin(margin.to_f/(margin+wy).to_f)
-          gPad.SetBottomMargin(small)
+          pad.SetTopMargin(margin.to_f/(margin+wy).to_f)
+          pad.SetBottomMargin(small)
           graph.GetYaxis.SetLabelSize(@font_size)
           graph.GetYaxis.SetTitleSize(@font_size)
           graph.GetXaxis.SetLabelColor(0)
           graph.GetYaxis.SetTitleOffset(@title_offset*(margin+wy).to_f/wy.to_f)
           graph.GetYaxis.SetTickLength(@ytick_length*(margin+wy).to_f/wy.to_f)
         elsif i==numPlot-1
-          gPad.SetTopMargin(small)
-          gPad.SetBottomMargin(margin.to_f/(margin+wy).to_f)
+          pad.SetTopMargin(small)
+          pad.SetBottomMargin(margin.to_f/(margin+wy).to_f)
           graph.GetYaxis.SetLabelSize(@font_size)
           graph.GetYaxis.SetTitleSize(@font_size)
           graph.GetXaxis.SetLabelSize(@font_size)
@@ -498,8 +501,8 @@ module RootUtil
           graph.GetYaxis.SetTitleOffset(@title_offset*(margin+wy).to_f/wy.to_f)
           graph.GetYaxis.SetTickLength(@ytick_length*(margin+wy).to_f/wy.to_f)
         else
-          gPad.SetTopMargin(small)
-          gPad.SetBottomMargin(small)
+          pad.SetTopMargin(small)
+          pad.SetBottomMargin(small)
           graph.GetYaxis.SetLabelSize(@font_size*(margin+wy).to_f/wy.to_f)
           graph.GetYaxis.SetTitleSize(@font_size*(margin+wy).to_f/wy.to_f)
           graph.GetXaxis.SetLabelColor(0)
@@ -527,8 +530,8 @@ module RootUtil
           yRange1 = 0.0 if yRange[1]==0.0
           graph.GetYaxis.SetRangeUser(yRange0, yRange1) 
         end
-        gPad.SetTickx
-        gPad.SetTicky
+        pad.SetTickx
+        pad.SetTicky
         
         padY2 = padY1
         padY1 -= padHeight
@@ -556,4 +559,8 @@ module RootUtil
       return @canvas
     end
   end
+end
+
+class Array
+  def to_double_array(); Root::DoubleArray::from_array(self); end
 end

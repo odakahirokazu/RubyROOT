@@ -10,4 +10,4 @@ f = Root::TF1.create("func", sin, 0, 2*Math::PI, 1)
 f.Draw
 c1.Update
 
-wait_root
+run_app

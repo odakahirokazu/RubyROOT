@@ -1,18 +1,19 @@
 RubyROOT
-================================================================
+========================================
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.4
+- Version: 0.1.5
 - Author: Hirokazu Odaka
 
 
- 1. Introduction
-----------------------------------------------------------------
+Introduction
+----------------------------------------
 
-RubyROOT is a Ruby binding of CERN ROOT Analysis Framework. RubyROOT provides a
-minimun set of Ruby interface to useful ROOT classes including histograms,
-tree, graphs, and canvases.
+RubyROOT is a Ruby binding of CERN ROOT Analysis Framework. RubyROOT provides
+a minimun set of Ruby interface to useful ROOT classes including histograms,
+tree, graphs, and canvases. By using this extension library, we get a powerful
+data analysis environment based on the flexibility of Ruby.
 
 ROOT already has a well-designed Ruby binding, "RubyRoot", in the package. But
 this seems not possible to be built with Ruby 2.0. Thus, we have started
@@ -21,100 +22,108 @@ developing of this library.
 Currently, this Ruby wapper offers the following ROOT classes:  
 TApplication, TAttAxis, TAttFill, TAttLine, TAttMarker, TAttPad, TAttText,
 TAxis, TBox, TBranch, TCanvas, TChain, TCollection, TColor, TDirectory,
-TDirectoryFile, TEllipse, TF1, TFile, TFormula,
-TGraph, TGraphAsymmErrors, TGraphErrors,
-TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I, TH2S, TH3,
-TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLeaf, TLine, TList, TNamed, TObjArray,
-TObjString, TObject, TPad, TROOT, TRandom, TRandom3, TSeqCollection, TString,
-TStyle, TTree, TVirtualPad.
+TDirectoryFile, TEllipse, TF1, TFile, TFormula, TGraph, TGraphAsymmErrors,
+TGraphErrors, TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I,
+TH2S, TH3, TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLeaf, TLine, TList, TNamed,
+TObjArray, TObjString, TObject, TPad, TROOT, TRandom, TRandom3, TSeqCollection,
+TString, TStyle, TTree, TVirtualPad.
 
-
- 2. Information
-----------------------------------------------------------------
-
-### (1) Contact
+### Contact
 
 - Hirokazu Odaka 
 - ISAS/JAXA
 - odaka(AT)astro.isas.jaxa.jp
 
-### (2) GitHub
+### GitHub
 
 https://github.com/odakahirokazu/RubyROOT/
 
-
- 3. Supported System
-----------------------------------------------------------------
+### Supported Platform
 
 - Mac OS X
-- Linux (not tested; but probably OK)
+- (Linux: not tested)
 
-### NOTE for Linux users
+#### Note for Linux users
 
-It should be possible to install RubyROOT on Linux. You need to install the
-same software descibed below and please try the same way. It might be necessary
-to modify CMake files in this package.
+It should be possible to install RubyROOT on Linux though we have not tested
+yet. You need to install the same software descibed below and then please try
+the same way. It might be necessary to modify CMake files in this package.
+
+#### Test environment
+
+The author's developing/testing environment is as follows:
+
+- MacBook Pro
+- OS X Mavericks (10.9.2)
+- Homebrew
+- Ruby 2.0.0-p353
+- ROOT 5.34/17
 
 
- 4. Required Software
-----------------------------------------------------------------
+Installation
+----------------------------------------
 
-### (1) C++ compliler
+### Required Software
 
-### (2) [CMake](http://www.cmake.org/) (Cross platform make)
+#### (1) C++ compliler
+
+#### (2) [CMake](http://www.cmake.org/)
 *version 2.8.11 or later*
 
-For easy installation, this package uses CMake to generate building tools such
-as Makefile.
+This package uses CMake (Cross platform make) for easy installation.
 
-### (3) [Ruby](http://www.ruby-lang.org/en/)
+#### (3) [Ruby](http://www.ruby-lang.org/en/)
 *version 2.0.0*
 
 Ruby 2.0 is required.
 
-### (4)[SWIG](http://www.swig.org/) (Simplified Wrapper and Interface Generator)
+#### (4) [SWIG](http://www.swig.org/)
 *version 2.0.9 or later*
 
-SWIG provides an easy way to generate extended libraries of various scripting
-languages.
+SWIG (Simplified Wrapper and Interface Generator) provides an easy way to
+generate extended libraries of various scripting languages.
 
-### (5) [ROOT](http://root.cern.ch/)
+#### (5) [ROOT](http://root.cern.ch/)
 *version 5.34.09 or later*
 
 A data analysis framework.
 
 
- 5. Installation
-----------------------------------------------------------------
+### Installation Guide
 
 On Mac OS X with [Homebrew](http://mxcl.github.io/homebrew/), the easiest way
 is as follows.
 
-### (1) Update Homebrew.
+#### (1) Update Homebrew.
 
-    unix> brew update
+    $ brew update
 
-### (2) Install required software via Homebrew.
+#### (2) Install required software via Homebrew.
 
-    unix> brew install cmake
-    unix> brew install swig
+    $ brew install cmake
+    $ brew install swig
 
-### (3) Install Ruby.
+#### (3) Check your Ruby version, or install Ruby.
 
-[Rbenv](https://github.com/sstephenson/rbenv/) provides nice Ruby environemt,
-in which you can easily/safely select different Ruby versions. It can easily
-introduced using Homebrew on OS X.
+You can check your Ruby verion by `ruby -v`. OS X Mavericks (10.9) includes
+Ruby 2.0.0-p247, so you do not need to install a new version of Ruby. Go to
+Step (4).
 
-    unix> brew install ruby-build
-    unix> brew install rbenv
+If you are using an older version, or you want to use a specific version of
+Ruby, we recommend using rbenv. [Rbenv](https://github.com/sstephenson/rbenv/)
+provides nice Ruby environemt, in which you can easily/safely choose different
+Ruby versions. It can easily introduced using Homebrew on OS X.
 
-To initialize rbenv, write the following line in `.bashrc` or `.zshrc`.
+    $ brew install ruby-build
+    $ brew install rbenv
+
+To initialize rbenv, write the following line in *.bashrc* or *.zshrc*.
 
     eval "$(rbenv init -)"
 
 Then, in a new shell, install Ruby as follows.
 
-    unix> rbenv install -l
+    $ rbenv install -l
 
 This will show like this => 
 
@@ -131,39 +140,252 @@ This will show like this =>
 
 Then, select the latest stable version: 2.0.0-p247, for example.
 
-    unix> rbenv install 2.0.0-p247
-    unix> rbenv rehash
-    unix> rbenv global 2.0.0-p247
+    $ rbenv install 2.0.0-p247
+    $ rbenv rehash
+    $ rbenv global 2.0.0-p247
 
-### (4) Install ROOT.
+#### (4) Install ROOT.
 
-    unix> brew install root
+    $ brew install root
 
-### (5) Obtain RubyROOT via GitHub.
+#### (5) Obtain RubyROOT via GitHub.
 
-    unix> git clone git://github.com/odakahirokazu/RubyROOT.git
+    $ git clone git://github.com/odakahirokazu/RubyROOT.git
 
-### (6) Build & install.
+#### (6) Build & install.
 
-    unix> ls
+    $ ls
       RubyROOT ...
     
-    unix> mkdir RubyROOT-build
-    unix> cd RubyROOT-build
-    unix> cmake ../RubyROOT -DCMAKE_INSTALL_PREFIX=<your_install_destination>
+    $ mkdir RubyROOT-build
+    $ cd RubyROOT-build
+    $ cmake ../RubyROOT -DCMAKE_INSTALL_PREFIX=<your_install_destination>
 
-By default, `CMAKE_INSTALL_PREFIX` is set to `$HOME`; The ruby extention
+By default, `CMAKE_INSTALL_PREFIX` is set to `$HOME`; the ruby extention
 library will be installed in `$HOME/lib/ruby`.
 
-    unix> make
-    unix> make install
+    $ make
+    $ make install
 
-### (7) Set environment variable.
+#### (7) Set environment variable.
+
+Write the following line in *.bashrc* or *.zshrc*.
 
     export RUBYLIB=<your_install_destination>/lib/ruby:$RUBYLIB
 
-### (8) Fun!
 
-You can find example scripts using RubyROOT in `examples` directory.
+Usage
+----------------------------------------
 
-****************************************************************
+### Getting Started---Histogram and File
+
+The first example is to handle a histogram and a file. You can get a script
+example from [examples/write_hist.rb](./examples/write_hist.rb).
+
+```ruby
+require 'RubyROOT'
+
+Root::TFile.open('hist.root', 'RECREATE') do
+  h = Root::TH1D.create('hist', 'Histogram', 100, -5.0, 5.0)
+  1.upto(h.GetNbinsX){|i| h.SetBinContent(i, i*4.0) }
+  h.SetBinContent(32, 547.2)
+  h.FillRandom("gaus", 15000)
+  h.Write
+end
+```
+
+This script makes a histogram named "hist" with 100 bins in a range from -5.0
+to +5.0. Then, certain values are assiend. It also fill 15000 values sampled
+from a Gaussian distribution with sigma=1. Finally, the created histogram is
+saved to a new file called "hist.root".
+
+A Ruby script using ROOT needs to require *RubyROOT.rb*. Most of classes and
+methods are members of *Root* module, so you can use a ROOT class with the
+module name like `Root::TFile`. You can also *include* the module in order to
+access the ROOT classes without specifying the module name explicitly.
+
+```ruby
+include Root
+h = TH1D.create('hist', 'Histogram', 100, -5.0, 5.0)
+```
+
+#### ROOT file
+
+To open a ROOT file, you can use `TFile.open(file_name, option)`. Without a
+block, this method returns a file object opened. If a block is given to the
+method like the above example, the file obejct is passed as a block variable
+and can be used in the block. After the block process, the file is
+automatically closed by calling `TFile.Close()`. In this case, *open* method
+returns *nil*. The next two code have the same effect.
+
+##### openning file without a block
+```ruby
+f = TFile.open('data.root')
+# do something
+f.Close
+```
+
+##### openning file with a block
+```ruby
+TFile.open('data.root') do |f|
+  # do something
+end
+```
+
+#### Making a histogram
+
+Histograms are frequently used data in our analysis. To make a histogram, you
+can use *create* methods like
+
+```ruby
+h = TH1D.create(name, title, number_of_bins, lower_edge, upper_edge)
+```
+
+This has the same effect as C++ code below:
+
+```c++
+TH1* h = new TH1D(name, title, number_of_bins, lower_edge, upper_edge);
+```
+
+Although Ruby classes normally have *new* method to allocate a new object, you
+should use *create* method to make a new histogram object.
+
+The histogram created by RubyROOT can be handled by the same way as C++
+functions:
+
+```ruby
+h.Fill(value)
+h.Fill(value, weight)
+h.SetBinContent(bin, counts)
+value = h.GetBinContent(bin)
+```
+
+To write the histogram to the file, you can use `TH1#Write()` or
+`TFile#Write()`. If you need to change the ownership of the object, you can use
+`TH1#SetDirectory(directory)`.
+
+```ruby
+h.SetDirectory(f)
+h.Write
+```
+
+##### About *create* method for experts
+
+In fact, it is possible to call *new* methods to make a histogram as
+`TH1D.new`, but this causes a conflict between Ruby's garbage collection and
+memory management by ROOT.
+
+#### Reading a histogram in a file
+
+Now you have gotten a file *hist.root* containing a histogram after execution
+of *write_hist.rb*. The second script
+[examples/read_hist.rb](./examples/read_hist.rb) tells us to how to
+read this file.
+
+```ruby
+Root::TFile.open('hist.root') do |f|
+  h = f.Get('hist')
+  for i in 1..h.GetNbinsX
+    puts "%4d %6.1f" % [i, h.GetBinContent(i)]
+  end
+end
+```
+
+This simple script opens *hist.root* and gets the histogram object *hist* by
+calling `TFile#Get()` method. Then, it dumps the bin labels and value contents
+of all bins. You will get this:
+
+       1    4.0
+       2    8.0
+       3   12.0
+    ...
+      49  774.0
+      50  791.0
+      51  798.0
+    ...
+      98  392.0
+      99  396.0
+     100  400.0
+
+#### Drawing a histogram
+
+See [examples/draw_hist.rb](./examples/draw_hist.rb) as an example to draw a
+histogram. To draw something in a canvas, you need to include *RootApp* module.
+A canvas should also be created by `TCanvas.create(name, title, width, height)`
+method. After invoking `TH1#Draw()` and `TCanvas#Update()`, call `run_app()` to
+run ROOT TApplication. **Please note that to quit the application properly, you
+need to select "Quit ROOT" from the pulldown menu "File".** If you closed the
+canvas window by pushing the close botton, the application would be still
+running. In this case, you can quit the application via Ruby application or
+*kill* command in the shell.
+
+```ruby
+#!/usr/bin/env ruby
+
+require 'RubyROOT'
+include RootApp
+
+Root::TFile.open('hist.root') do |f|
+  c1 = Root::TCanvas.create("c1", "canvas1", 640, 480)
+  h = f.Get('hist')
+  h.Draw
+  h.SetLineColor(2)
+  h.GetXaxis.SetTitle("values")
+  h.GetXaxis.SetTitleOffset(1.2)
+  h.GetXaxis.CenterTitle
+  h.GetYaxis.SetTitle("counts")
+  h.GetYaxis.CenterTitle
+  h.GetYaxis.SetTitleOffset(1.35)
+  h.SetTitle("Histogram drawn by RubyROOT")
+  c1.Update
+  run_app
+end
+```
+
+This script will draw a histogram like this.
+
+![Histogram sample](./examples/hist.png)
+
+#### 2D and 3D histograms
+
+RubyROOT supports 1D, 2D and 3D histograms (TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I, TH2S, TH3, TH3C, TH3D, TH3F, TH3I, TH3S). See
+[examples/hist2d.rb](./examples/hist2d.rb).
+
+### Tree
+
+(now writing...)
+
+### Graph
+
+(now writing...)
+
+### Functions
+
+(now writing...)
+
+Frequently Asked Questions
+----------------------------------------
+
+### Installation
+
+(now writing...)
+
+### Data Analysis using RubyROOT
+
+#### When should I use *create* method insted of *new* method?
+
+You should use *create* when you make a histogram, tree, canvas, or graph.
+These *create* methods are provided if default *new* methods cause some
+problems within the Ruby environment or have incovenient API as Ruby interface.
+To make a histogram or tree object, you should use *create* in order to avoid
+a conflict with Ruby's garbage collection. In the case of graphs, *create*
+method make objects directly from Ruby native Array.
+
+#### Can I use a tree including a variable-length array?
+
+Yes, you can. See
+[examples/write_tree_variable_length.rb](./examples/write_tree_variable_length.rb)
+and
+[examples/read_tree_variable_length.rb](./examples/read_tree_variable_length.rb).
+
+****************************************
