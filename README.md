@@ -56,9 +56,19 @@ The author's developing/testing environment is as follows:
 
 - MacBook Pro
 - OS X Mavericks (10.9.2)
+- Apple LLVM version 5.1 (clang-503.0.38) (based on LLVM 3.4svn)
 - Homebrew
-- Ruby 2.0.0-p353
-- ROOT 5.34/17
+- ruby 2.0.0p353 (2013-11-22 revision 43784)
+- ROOT 5.34/18
+
+### Contributions Are Welcome
+
+Contributions of any kind including documentation, testing, and coding are very
+welcome.
+
+### Licence
+
+RubyROOT is distributed under the GNU General Public License version 3.
 
 
 Installation
@@ -178,7 +188,7 @@ Write the following line in *.bashrc* or *.zshrc*.
 Usage
 ----------------------------------------
 
-### Getting Started---Histogram and File
+### Getting Started: Histogram and File
 
 The first example is to handle a histogram and a file. You can get a script
 example from [examples/write_hist.rb](./examples/write_hist.rb).
@@ -420,17 +430,115 @@ end
 ```
 
 The tree saved in a file can be obtained by `TFile#Get()`. `TTree#read()`
-returns an *enumerable* object that scan all entires (rows), so `each` method
+returns an *enumerable* object that scans all entires (rows), so `each` method
 with a block can be accessible to the contents of each entry via the branch
 name like `t.energy`.
 
 ### Graph
 
-(now writing...)
+Making a graph is easy. See [examples/graph.rb](./examples/graph.rb).
+A TGraph object is created by `TGraph.create(x_values, y_values)`.
+
+```ruby
+require 'RubyROOT'
+include RootApp
+
+### data definition
+x = [1.0, 2.3, 3.1, 4.0, 5.0]
+y = [1.2, 2.1, 10.2, 3.2, 4.0]
+
+### make a graph and draw it
+graph = Root::TGraph.create(x, y)
+graph.SetName("graph1")
+c1 = Root::TCanvas.create
+graph.Draw("APL")
+c1.Update
+run_app
+```
+
+RubyROOT also provides *TGraphErrors* and *TGraphAsymmErrors*.
+See [examples/graph_with_error_bars.rb](./examples/graph_with_error_bars.rb)
+and [examples/graph_with_asymmetric_error_bars.rb](./examples/graph_with_asymmetric_error_bars.rb).
+All arguments are given as *Array*.
+
+```ruby
+graph1 = TGraphErrors.create(x_values, y_values, x_errors, y_errors)
+graph2 = TGraphAsymmErrors.create(x_values, y_values, x_lower_errors, x_upper_errors, y_lower_errors, y_upper_errors)
+```
+
+To write a graph into a file, the graph object must have a name.
+See [write_graph.rb](./examples/write_graph.rb).
+
+```ruby
+graph = Root::TGraphErrors.create(x, y, xe, ye)
+graph.SetName("graph1")
+```
 
 ### Functions
 
-(now writing...)
+Class *TF1* is used for a mathematical function.
+See [function.rb](./examples/function.rb).
+This script makes a TF1 object that represents a function *f(x)=(x-1)^2-2*.
+This class allows us to use *new* method to create an object. Then, the
+function is evaluated at three x-values, 0.0, 1.0, and 2.0. To draw it, just
+call `TF1#Draw()` method.
+
+```ruby
+f = Root::TF1.new("func", "(x-1)^2-2", -3.0, +4.0)
+puts "f(x)=#{f.Eval(0.0)} for x=0.0"
+puts "f(x)=#{f.Eval(1.0)} for x=1.0"
+puts "f(x)=#{f.Eval(2.0)} for x=2.0"
+f.Draw
+```
+
+#### Function defined in Ruby code
+
+You can also define a function in a Ruby code session.
+[function_in_ruby.rb](./examples/function_in_ruby.rb) tells us how
+to do it. You can use a function object generator `Root::func` which accepts
+a block returning a user-defined function value of a given argument *x*.
+
+```ruby
+acos_extended = Root::func{|x|
+  n = ((x+1.0)/2.0)
+  cycle = (n>0.0) ? n.to_i : -(n.abs.to_i)-1
+  Math::acos(x-cycle*2.0)-Math::PI*cycle
+}
+
+f = Root::TF1.create("func", acos_extended, -5.0, 5.0, 1)
+```
+
+The block given to `Root::func` describes an arbitray user-defined function. In
+this example, we try to define an extended version of *arccos(x)* that has a
+limitless domain of definition while normal *arcsos(x)* accepts a value ranging
+from -1 to +1. As shown below, the function is extended to outside of [-1, 1].
+The normal version of *acos(x)* created by `TF1.new` is superposed in blue
+color.
+
+![Extend acos(x)](./examples/func_acos.png)
+
+##### Comments for experts
+
+The function object generator `Root::func` is defined in *RubyROOT.rb* as
+
+```ruby
+def func(&f)
+  lambda {|x, p| f.(x[0]) }
+end
+```
+
+So you can define the function obejct by directly using `lambda`.
+You can find it in [function_in_ruby2.rb](./examples/function_in_ruby2.rb).
+
+```ruby
+acos_extended = lambda{|xs, ps|
+  x = xs[0]
+  n = ((x+1.0)/2.0)
+  cycle = (n>0.0) ? n.to_i : -(n.abs.to_i)-1
+  Math::acos(x-cycle*2.0)-Math::PI*cycle
+}
+```
+
 
 Frequently Asked Questions
 ----------------------------------------
@@ -457,5 +565,6 @@ Yes, you can. See
 [examples/write_tree_variable_length.rb](./examples/write_tree_variable_length.rb)
 and
 [examples/read_tree_variable_length.rb](./examples/read_tree_variable_length.rb).
+
 
 ****************************************
