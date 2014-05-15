@@ -56,9 +56,9 @@ The author's developing/testing environment is as follows:
 
 - MacBook Pro
 - OS X Mavericks (10.9.2)
-- Apple LLVM version 5.1 (clang-503.0.38) (based on LLVM 3.4svn)
+- Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
 - Homebrew
-- ruby 2.0.0p353 (2013-11-22 revision 43784)
+- ruby 2.0.0p481 (2014-05-08 revision 45883)
 - ROOT 5.34/18
 
 ### Contributions Are Welcome
@@ -143,17 +143,17 @@ This will show like this =>
       1.8.6-p420
       1.8.7-p249
       ...
-      2.0.0-p0
-      2.0.0-p195
-      2.0.0-p247
+      2.0.0-p353
+      2.0.0-p451
+      2.0.0-p481
       2.0.0-preview1
       ...
 
-Then, select the latest stable version: 2.0.0-p247, for example.
+Then, select the latest stable version: 2.0.0-p481, for example.
 
-    $ rbenv install 2.0.0-p247
+    $ rbenv install 2.0.0-p481
     $ rbenv rehash
-    $ rbenv global 2.0.0-p247
+    $ rbenv global 2.0.0-p481
 
 #### (4) Install ROOT.
 
@@ -545,7 +545,17 @@ Frequently Asked Questions
 
 ### Installation
 
-(now writing...)
+#### I failed to install Ruby via rbenv.
+
+Try the latest versions of rbenv and ruby-build you can obtain via homebrew.
+
+For version 2.0.0-p451, I needed to set RUBY_CONFIGURE_OPTS like this:
+
+    RUBY_CONFIGURE_OPTS="--with-readline-dir=/usr/local" rbenv install 2.0.0-p451
+
+This workaround forces ruby-build to use readline provided by OS X system,
+which is actually libedit (readline compatible library).
+This problem seems to be resolved in version 2.0.0-p481.
 
 ### Data Analysis using RubyROOT
 
