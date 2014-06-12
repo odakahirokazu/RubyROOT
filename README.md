@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.5
+- Version: 0.1.6
 - Author: Hirokazu Odaka
 
 
@@ -21,11 +21,11 @@ this seems not possible to be built with Ruby 2.0. Thus, we have started
 developing of this library.
 
 Currently, this Ruby wapper offers the following ROOT classes:  
-TApplication, TAttAxis, TAttFill, TAttLine, TAttMarker, TAttPad, TAttText,
+TApplication, TArrow, TAttAxis, TAttFill, TAttLine, TAttMarker, TAttPad, TAttText,
 TAxis, TBox, TBranch, TCanvas, TChain, TCollection, TColor, TDirectory,
 TDirectoryFile, TEllipse, TF1, TFile, TFormula, TGraph, TGraphAsymmErrors,
 TGraphErrors, TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I,
-TH2S, TH3, TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLeaf, TLine, TList, TNamed,
+TH2S, TH3, TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLeaf, TLegend, TLine, TList, TNamed,
 TObjArray, TObjString, TObject, TPad, TROOT, TRandom, TRandom3, TSeqCollection,
 TString, TStyle, TTree, TVirtualPad.
 
