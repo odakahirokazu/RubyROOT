@@ -43,6 +43,10 @@
 #include <TLine.h>
 #include <TBox.h>
 #include <TEllipse.h>
+#include <TArrow.h>
+#include <TPave.h>
+#include <TLegend.h>
+#include <TLegendEntry.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
@@ -77,3 +81,4 @@
 %include "root_random.i"
 %include "root_string.i"
 %include "root_minuit2.i"
+%include "root_legend.i"

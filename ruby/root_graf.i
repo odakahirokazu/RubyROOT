@@ -115,3 +115,36 @@ public:
   virtual void   SetX1(Double_t x1) ; // *MENU*
   virtual void   SetY1(Double_t y1) ; // *MENU*
 };
+
+
+class TArrow : public TLine, public TAttFill {
+public:
+  TArrow();
+  TArrow(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2
+         ,Float_t arrowsize=0.05
+         ,Option_t *option=">");
+  TArrow(const TArrow &arrow);
+  virtual ~TArrow();
+  void Copy(TObject &arrow) const;
+
+  virtual void   Draw(Option_t *option="");
+  virtual void   DrawArrow(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2
+                           ,Float_t arrowsize=0 ,Option_t *option="");
+  Float_t        GetAngle() const;
+  Float_t        GetArrowSize() const;
+  Option_t      *GetOption() const;
+  virtual void   Paint(Option_t *option="");
+  virtual void   PaintArrow(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2
+                            ,Float_t arrowsize=0.05 ,Option_t *option=">");
+  virtual void   SavePrimitive(ostream &out, Option_t *option = "");
+  virtual void   SetAngle(Float_t angle=60);
+  virtual void   SetArrowSize(Float_t arrowsize=0.05);
+  virtual void   SetOption(Option_t *option=">");
+
+  static void SetDefaultAngle     (Float_t  Angle    );
+  static void SetDefaultArrowSize (Float_t  ArrowSize);  
+  static void SetDefaultOption    (Option_t *Option  );
+  static Float_t GetDefaultAngle    ();
+  static Float_t GetDefaultArrowSize();
+  static Option_t *GetDefaultOption ();
+};
