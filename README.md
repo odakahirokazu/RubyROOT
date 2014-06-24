@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.6
+- Version: 0.1.7
 - Author: Hirokazu Odaka
 
 
@@ -576,5 +576,19 @@ Yes, you can. See
 and
 [examples/read_tree_variable_length.rb](./examples/read_tree_variable_length.rb).
 
+#### How can I get a parameter and error value of the mizimization result?
+
+You can use methods below:
+- Minuit2FunctionMinimizer#GetParameter(index)
+- Minuit2FunctionMinimizer#GetError(index)
+
+See also [examples/minimization.rb](./examples/minimization.rb).
+
+#### Can I use color constants defined in ROOT?
+
+Yes. But they are renamed in order to obey a Ruby grammar that the first
+character of a constant is capital. You can use:
+KWhite, KBlack, KGray, KRed, KGreen, KBlue, KYellow, KMagenta, KCyan,
+KOrange, KSpring, KTeal, KAzure, KViolet, KPink.
 
 ****************************************
