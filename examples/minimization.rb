@@ -8,6 +8,8 @@ minuit.SetFunctionObject sin, 1
 minuit.SetLimitedVariable(0, 'x', 0, 0.01, -Math::PI, +Math::PI)
 minuit.Minimize
 minuit.PrintResults
+x = minuit.GetParameter(0); err = minuit.GetError(0)
+puts "x: %.4f +/- %.4f" % [x, err]
 puts ""
 
 minuit.Clear

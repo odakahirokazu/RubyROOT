@@ -95,6 +95,9 @@ public:
     this->SetFunction(*_function);
   }
 
+  double GetParameter(int i) const { return (this->X())[i]; }
+  double GetError(int i) const { return (this->Errors())[i]; }
+
 private:
   rubyroot::RubyIMultiGenFunction* _function;
 };

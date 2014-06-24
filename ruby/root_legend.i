@@ -4,11 +4,6 @@
 
 class TPave : public TBox {
 public:
-  // TPave status bits
-  enum {
-    kNameIsAction = BIT(11)   // double clicking on TPave will execute action
-  };
-  
   TPave();
   TPave(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2,
         Int_t bordersize=4 ,Option_t *option="br");

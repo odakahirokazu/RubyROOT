@@ -642,6 +642,8 @@ public:
   virtual ~Minuit2FunctionMinimizer();
 
   virtual void SetFunctionObject(VALUE func, int nx);
+  double GetParameter(int i) const;
+  double GetError(int i) const;
 };
 
 }
