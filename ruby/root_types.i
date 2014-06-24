@@ -53,3 +53,22 @@ typedef short          SCoord_t;    //Screen coordinates (short)
 typedef double         Coord_t;     //Pad world coordinates (double)
 typedef float          Angle_t;     //Graphics angle (float)
 typedef float          Size_t;      //Attribute size (float)
+
+%rename(KWhite) kWhite;
+%rename(KBlack) kBlack;
+%rename(KGray) kGray;
+%rename(KRed) kRed;
+%rename(KGreen) kGreen;
+%rename(KBlue) kBlue;
+%rename(KYellow) kYellow;
+%rename(KMagenta) kMagenta;
+%rename(KCyan) kCyan;
+%rename(KOrange) kOrange;
+%rename(KSpring) kSpring;
+%rename(KTeal) kTeal;
+%rename(KAzure) kAzure;
+%rename(KViolet) kViolet;
+%rename(KPink) kPink;
+enum EColor{ kWhite, kBlack, kGray, kRed, kGreen, kBlue,
+             kYellow, kMagenta, kCyan, kOrange,
+             kSpring, kTeal, kAzure, kViolet, kPink };
