@@ -66,6 +66,16 @@ public:
   virtual Double_t     *GetEXlow()  const;
   virtual Double_t     *GetEYhigh() const;
   virtual Double_t     *GetEYlow()  const;
+  %extend {
+    Double_t getX(Int_t i) const { return $self->GetX()[i]; }
+    Double_t getY(Int_t i) const { return $self->GetY()[i]; }
+    Double_t getEX(Int_t i) const { return $self->GetEX()[i]; }
+    Double_t getEY(Int_t i) const { return $self->GetEY()[i]; }
+    Double_t getEXhigh(Int_t i) const { return $self->GetEXhigh()[i]; }
+    Double_t getEXlow(Int_t i) const { return $self->GetEXlow()[i]; }
+    Double_t getEYhigh(Int_t i) const { return $self->GetEYhigh()[i]; }
+    Double_t getEYlow(Int_t i) const { return $self->GetEYlow()[i]; }
+  }
   virtual Double_t     *GetEXlowd()  const;
   virtual Double_t     *GetEXhighd() const;
   virtual Double_t     *GetEYlowd()  const;
