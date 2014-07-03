@@ -39,4 +39,7 @@
 %template(castIntoTLeaf) castInto<TLeaf>;
 %template(castIntoTGraph) castInto<TGraph>;
 %template(castIntoTGraphErrors) castInto<TGraphErrors>;
-%template(castIntoAssymTGraphErrors) castInto<TGraphAsymmErrors>;
+%template(castIntoTGraphAsymmErrors) castInto<TGraphAsymmErrors>;
+%template(castIntoTDirectory) castInto<TDirectory>;
+%template(castIntoTDirectoryFile) castInto<TDirectoryFile>;
+%template(castIntoTFile) castInto<TFile>;
