@@ -43,3 +43,5 @@
 %template(castIntoTDirectory) castInto<TDirectory>;
 %template(castIntoTDirectoryFile) castInto<TDirectoryFile>;
 %template(castIntoTFile) castInto<TFile>;
+%template(castIntoTFormula) castInto<TFormula>;
+%template(castIntoTF1) castInto<TF1>;
