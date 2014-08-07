@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.7
+- Version: 0.1.8
 - Author: Hirokazu Odaka
 
 
@@ -55,11 +55,11 @@ the same way. It might be necessary to modify CMake files in this package.
 The author's developing/testing environment is as follows:
 
 - MacBook Pro
-- OS X Mavericks (10.9.2)
+- OS X Mavericks (10.9.4)
 - Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
 - Homebrew
 - ruby 2.0.0p481 (2014-05-08 revision 45883)
-- ROOT 5.34/18
+- ROOT 5.34/19
 
 ### Contributions Are Welcome
 
@@ -95,7 +95,7 @@ SWIG (Simplified Wrapper and Interface Generator) provides an easy way to
 generate extended libraries of various scripting languages.
 
 #### (5) [ROOT](http://root.cern.ch/)
-*version 5.34.09 or later*
+*version 5.34/19 or later*
 
 A data analysis framework.
 
