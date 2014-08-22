@@ -60,6 +60,15 @@ public:
       fX(x), fY(y) {}
    TSplinePoly(TSplinePoly const &other);
 
+  %extend {
+    static TSplinePoly* create(){
+      return new TSplinePoly();
+    }
+    static TSplinePoly* create(Double_t x, Double_t y){
+      return new TSplinePoly(x,y);
+    }
+  }
+
    Double_t &X() {return fX;}
    Double_t &Y() {return fY;}
    void GetKnot(Double_t &x, Double_t &y) const {x=fX; y=fY;}
@@ -86,6 +95,16 @@ public:
    TSplinePoly3(Double_t x, Double_t y, Double_t b, Double_t c, Double_t d) :
       TSplinePoly(x,y), fB(b), fC(c), fD(d) {}
    TSplinePoly3(TSplinePoly3 const &other);
+
+  %extend {
+    static TSplinePoly3* create(){
+      return new TSplinePoly3();
+    }
+    static TSplinePoly3* create(Double_t x, Double_t y, Double_t b, Double_t c, Double_t d){
+      return new TSplinePoly3(x,y,b,c,d);
+    }
+  }
+
 
    Double_t &B() {return fB;}
    Double_t &C() {return fC;}
@@ -121,6 +140,15 @@ public:
       Double_t d, Double_t e, Double_t f) :
       TSplinePoly(x,y), fB(b), fC(c), fD(d), fE(e), fF(f) {}
    TSplinePoly5(TSplinePoly5 const &other);
+
+  %extend {
+    static TSplinePoly5* create(){
+      return new TSplinePoly5();
+    }
+    static TSplinePoly5* create(Double_t x, Double_t y, Double_t b, Double_t c, Double_t d, Double_t e, Double_t f){
+      return new TSplinePoly5(x,y,b,c,d,e,f);
+    }
+  }
 
    Double_t &B() {return fB;}
    Double_t &C() {return fC;}
@@ -179,6 +207,44 @@ public:
    TSpline3(const TH1 *h, const char *opt=0,
             Double_t valbeg=0, Double_t valend=0);
    TSpline3(const TSpline3&);
+ 
+  %extend {
+    static TSpline3* create(){
+      return new TSpline3();
+    }
+    static TSpline3* create(const char *title,
+            Double_t x[], Double_t y[], Int_t n, const char *opt=0,
+            Double_t valbeg=0, Double_t valend=0){
+      return new TSpline3(title,x,y,n,opt,valbeg,valend);
+    }
+    static TSpline3* create(const char *title,
+            Double_t xmin, Double_t xmax,
+            Double_t y[], Int_t n, const char *opt=0,
+            Double_t valbeg=0, Double_t valend=0){
+      return new TSpline3(title,xmin,xmax,y,n,opt,valbeg,valend);
+    }
+    static TSpline3* create(const char *title,
+            Double_t x[], const TF1 *func, Int_t n, const char *opt=0,
+            Double_t valbeg=0, Double_t valend=0){
+      return new TSpline3();
+    }
+    static TSpline3* create(const char *title,
+            Double_t xmin, Double_t xmax,
+            const TF1 *func, Int_t n, const char *opt=0,
+            Double_t valbeg=0, Double_t valend=0){
+      return new TSpline3(title,xmin,xmax,func,n,opt,valbeg,valend);
+    }
+    static TSpline3* create(const char *title,
+            const TGraph *g, const char *opt=0,
+            Double_t valbeg=0, Double_t valend=0){
+      return new TSpline3(title,g,opt,valbeg,valend);
+    }
+    static TSpline3* create(const TH1 *h, const char *opt=0,
+            Double_t valbeg=0, Double_t valend=0){
+      return new TSpline3(h,opt,valbeg,valend);
+    }
+  }
+
    Int_t    FindX(Double_t x) const;
    Double_t Eval(Double_t x) const;
    Double_t Derivative(Double_t x) const;
@@ -238,6 +304,50 @@ public:
             const char *opt=0, Double_t b1=0, Double_t e1=0,
             Double_t b2=0, Double_t e2=0);
    TSpline5(const TSpline5&);
+ 
+  %extend {
+    static TSpline5* create(){
+      return new TSpline5();
+    }
+    static TSpline5* create(const char *title,
+            Double_t x[], Double_t y[], Int_t n,
+            const char *opt=0, Double_t b1=0, Double_t e1=0,
+            Double_t b2=0, Double_t e2=0){
+      return new TSpline5(title,x,y,n,opt,b1,e1,b2,e2);
+    }
+    static TSpline5* create(const char *title,
+            Double_t xmin, Double_t xmax,
+            Double_t y[], Int_t n,
+            const char *opt=0, Double_t b1=0, Double_t e1=0,
+            Double_t b2=0, Double_t e2=0){
+      return new TSpline5(title,xmin,xmax,y,n,opt,b1,e1,b2,e2);
+    }
+    static TSpline5* create(const char *title,
+            Double_t x[], const TF1 *func, Int_t n,
+            const char *opt=0, Double_t b1=0, Double_t e1=0,
+            Double_t b2=0, Double_t e2=0){
+      return new TSpline5(title,x,func,n,opt,b1,e1,b2,e2);
+    }
+    static TSpline5* create(const char *title,
+            Double_t xmin, Double_t xmax,
+            const TF1 *func, Int_t n,
+            const char *opt=0, Double_t b1=0, Double_t e1=0,
+            Double_t b2=0, Double_t e2=0){
+      return new TSpline5(title,xmin,xmax,func,n,opt,b1,e1,b2,e2);
+    }
+    static TSpline5* create(const char *title,
+            const TGraph *g,
+            const char *opt=0, Double_t b1=0, Double_t e1=0,
+            Double_t b2=0, Double_t e2=0){
+      return new TSpline5(title,g,opt,b1,e1,b2,e2);
+    }
+    static TSpline5* create(const TH1 *h,
+            const char *opt=0, Double_t b1=0, Double_t e1=0,
+            Double_t b2=0, Double_t e2=0){
+      return new TSpline5(h,opt,b1,e1,b2,e2);
+    }
+  }
+
    Int_t    FindX(Double_t x) const;
    Double_t Eval(Double_t x) const;
    Double_t Derivative(Double_t x) const;
