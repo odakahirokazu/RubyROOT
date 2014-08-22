@@ -38,7 +38,9 @@
 #include <TRandom3.h>
 #include <TObjString.h>
 #include <Math/Minimizer.h>
-#include <Minuit2/Minuit2Minimizer.h>
+#ifndef UNUSE_MINUIT2
+	#include <Minuit2/Minuit2Minimizer.h>
+#endif
 #include <Math/MinimizerOptions.h>
 #include <TLine.h>
 #include <TBox.h>
@@ -81,6 +83,8 @@
 %include "root_cast.i"
 %include "root_random.i"
 %include "root_string.i"
-%include "root_minuit2.i"
+#ifndef UNUSE_MINUIT2
+	%include "root_minuit2.i"
+#endif
 %include "root_legend.i"
 %include "root_spline.i"
