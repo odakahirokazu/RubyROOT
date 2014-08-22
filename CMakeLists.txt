@@ -32,6 +32,12 @@ message("-- ROOTSYS = ${ROOTSYS}")
 message("-- ROOT_INC_DIR = ${ROOT_INC_DIR}")
 message("-- ROOT_LIB_DIR = ${ROOT_LIB_DIR}")
 
+### check optional flags
+if(UNUSE_MINUIT2)
+	set(ADDITIONAL_SWIG_FLAGS "-DUNUSE_MINUIT2")
+	message("-- MINUIT2 is NOT used")
+endif(UNUSE_MINUIT2)
+
 ### subdirecties
 add_subdirectory(ruby)
 
