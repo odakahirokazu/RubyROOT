@@ -47,6 +47,7 @@
 #include <TPave.h>
 #include <TLegend.h>
 #include <TLegendEntry.h>
+#include <TSpline.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
@@ -82,3 +83,4 @@
 %include "root_string.i"
 %include "root_minuit2.i"
 %include "root_legend.i"
+%include "root_spline.i"
