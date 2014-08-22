@@ -45,3 +45,6 @@
 %template(castIntoTFile) castInto<TFile>;
 %template(castIntoTFormula) castInto<TFormula>;
 %template(castIntoTF1) castInto<TF1>;
+%template(castIntoTSpline) castInto<TSpline>;
+%template(castIntoTSpline3) castInto<TSpline3>;
+%template(castIntoTSpline5) castInto<TSpline5>;
