@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.8
+- Version: 0.1.9
 - Author: Hirokazu Odaka
 
 
@@ -27,7 +27,7 @@ TDirectoryFile, TEllipse, TF1, TFile, TFormula, TGraph, TGraphAsymmErrors,
 TGraphErrors, TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I,
 TH2S, TH3, TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLeaf, TLegend, TLine, TList, TNamed,
 TObjArray, TObjString, TObject, TPad, TROOT, TRandom, TRandom3, TSeqCollection,
-TString, TStyle, TTree, TVirtualPad.
+TString, TStyle, TSpline, TTree, TVirtualPad.
 
 ### Contact
 
