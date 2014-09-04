@@ -93,6 +93,17 @@ public:
   TFile();
   TFile(const char *fname, Option_t *option="", const char *ftitle="", Int_t compress=1);
   virtual ~TFile();
+
+  %extend {
+    static TFile* create(){
+      return new TFile();
+    }
+    static TFile* create(const char *fname, Option_t *option="", const char *ftitle="", Int_t compress=1){
+      return new TFile(fname, option, ftitle, compress);
+    }
+  }
+
+
   virtual void        Close(Option_t *option=""); // *MENU*
   virtual void        Copy(TObject &) const;
   virtual Bool_t      Cp(const char *dst, Bool_t progressbar = kTRUE,UInt_t buffersize = 1000000);
