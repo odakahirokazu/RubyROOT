@@ -54,10 +54,15 @@
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
 #include "Minuit2FunctionMinimizer.hpp"
-  %}
+
+%}
+
+
 
 %include <std_string.i>
- //%include <std_vector.i>
+%include <std_vector.i>
+%template(StringVector) std::vector<std::string>;
+%template(FloatVector) std::vector<double>;
 %include <carrays.i>
 
 %array_class(int, IntArray)
