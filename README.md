@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.9
+- Version: 0.1.10
 - Author: Hirokazu Odaka
 
 
@@ -55,11 +55,11 @@ the same way. It might be necessary to modify CMake files in this package.
 The author's developing/testing environment is as follows:
 
 - MacBook Pro
-- OS X Mavericks (10.9.4)
-- Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)
+- OS X Yosemite (10.10.1)
+- Apple LLVM version 6.0 (clang-600.0.54) (based on LLVM 3.5svn)
 - Homebrew
-- ruby 2.0.0p481 (2014-05-08 revision 45883)
-- ROOT 5.34/19
+- ruby 2.1.5p273 (2014-11-13 revision 48405)
+- ROOT 5.34/22
 
 ### Contributions Are Welcome
 
