@@ -15,9 +15,15 @@ project(RubyROOT)
 message("-- Install destination prefix: ${CMAKE_INSTALL_PREFIX}")
 set(CMAKE_MODULE_PATH ${RubyROOT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
+### Options
+option(ENABLE_MINUIT2 "enable Munuit2" ON)
+
 ### External libraries
 ### ROOT ###
 set(ROOTSYS $ENV{ROOTSYS})
+if(ENABLE_MINUIT2)
+  set(ROOT_MINUIT2_LIB Minuit2)
+endif()
 find_path(ROOT_INC_DIR
   NAMES TH1.h TTree.h
   PATHS ${ROOTSYS}/include/root ${ROOTSYS}/include)
@@ -27,16 +33,10 @@ find_path(ROOT_LIB_DIR
 set(ROOT_LIB
   Core Cint RIO Net Hist Graf Graf3d Gpad Tree
   Rint Postscript Matrix Physics MathCore Thread
-  Minuit2)
+  ${ROOT_MINUIT2_LIB})
 message("-- ROOTSYS = ${ROOTSYS}")
 message("-- ROOT_INC_DIR = ${ROOT_INC_DIR}")
 message("-- ROOT_LIB_DIR = ${ROOT_LIB_DIR}")
-
-### check optional flags
-if(UNUSE_MINUIT2)
-  set(ADDITIONAL_SWIG_FLAGS "-DUNUSE_MINUIT2")
-  message("-- MINUIT2 is NOT used")
-endif(UNUSE_MINUIT2)
 
 ### subdirecties
 add_subdirectory(ruby)
