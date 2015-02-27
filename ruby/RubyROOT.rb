@@ -53,7 +53,7 @@ module RootApp
 
   def self.included(mod)
     unless @@app
-      @@app = Root::TApplication.new("App", nil, nil)
+      @@app = Root::TRint.new("App", nil, nil)
       # puts '@@app initialized'
     end
   end

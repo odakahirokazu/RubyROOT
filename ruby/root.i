@@ -17,6 +17,7 @@
 #include <TObjArray.h>
 #include <TAxis.h>
 #include <TApplication.h>
+#include <TRint.h>
 #include <TH1.h>
 #include <TH2.h>
 #include <TH3.h>
