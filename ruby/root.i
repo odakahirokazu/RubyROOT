@@ -17,6 +17,7 @@
 #include <TObjArray.h>
 #include <TAxis.h>
 #include <TApplication.h>
+#include <TRint.h>
 #include <TH1.h>
 #include <TH2.h>
 #include <TH3.h>
@@ -38,8 +39,8 @@
 #include <TRandom3.h>
 #include <TObjString.h>
 #include <Math/Minimizer.h>
-#ifndef UNUSE_MINUIT2
-	#include <Minuit2/Minuit2Minimizer.h>
+#ifdef USE_MINUIT2
+#include <Minuit2/Minuit2Minimizer.h>
 #endif
 #include <Math/MinimizerOptions.h>
 #include <TLine.h>
@@ -53,12 +54,17 @@
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
+#ifdef USE_MINUIT2
 #include "Minuit2FunctionMinimizer.hpp"
-  %}
+#endif
+%}
 
 %include <std_string.i>
- //%include <std_vector.i>
 %include <carrays.i>
+
+%include <std_vector.i>
+%template(StringVector) std::vector<std::string>;
+%template(FloatVector) std::vector<double>;
 
 %array_class(int, IntArray)
 %array_class(double, DoubleArray)
@@ -83,8 +89,8 @@
 %include "root_cast.i"
 %include "root_random.i"
 %include "root_string.i"
-#ifndef UNUSE_MINUIT2
-	%include "root_minuit2.i"
+#ifdef USE_MINUIT2
+%include "root_minuit2.i"
 #endif
 %include "root_legend.i"
 %include "root_spline.i"

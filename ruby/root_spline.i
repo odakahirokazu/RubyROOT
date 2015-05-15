@@ -43,6 +43,18 @@ public:
    virtual Double_t Eval(Double_t x) const=0;
    virtual void     SaveAs(const char * /*filename*/,Option_t * /*option*/) const {;}
    void             SetNpx(Int_t n) {fNpx=n;}
+
+  %extend {
+    std::vector<double> GetKnot(Int_t i){
+      std::vector<double> result(2);
+      double x,y;
+      $self->GetKnot(i, x, y);
+      result[0]=x;
+      result[1]=y;
+      return result;
+    }
+  }
+
 };
 
 
@@ -259,6 +271,22 @@ public:
    virtual  void     SetPoint(Int_t i, Double_t x, Double_t y);
    virtual  void     SetPointCoeff(Int_t i, Double_t b, Double_t c, Double_t d);
    static void Test();
+
+  %extend {
+    /** Returns x,y,b,c,d as std::vector<double>
+    */
+    std::vector<double> GetCoeff(Int_t i){
+      std::vector<double> result(5);
+      double x,y,b,c,d;
+      $self->GetCoeff(i, x,y,b,c,d);
+      result[0]=x;
+      result[1]=y;
+      result[2]=b;
+      result[3]=c;
+      result[4]=d;
+      return result;
+    }
+  }
 
 };
 
