@@ -53,7 +53,7 @@ module RootApp
 
   def self.included(mod)
     unless @@app
-      @@app = Root::TApplication.new("App", nil, nil)
+      @@app = Root::TRint.new("App", nil, nil)
       # puts '@@app initialized'
     end
   end
@@ -185,7 +185,7 @@ module Root
       reader.set_branches
       reader
     end
-    
+
     def define(**branches)
       writer = TreeIOHelper.new(self)
       branches.each do |k, v|
@@ -227,7 +227,7 @@ module Root
       writer
     end
   end
-  
+
   module TreeIOHelper::Impl
     def each()
       get_entries().times do |i|
@@ -235,12 +235,22 @@ module Root
         yield self
       end
     end
+
+    def [](i)
+      if i<0; i+=size(); end
+      get_entry(i)
+      self
+    end
+
+    def size()
+      get_entries()
+    end
   end
-  
+
   class TreeIOHelper
     include Enumerable
   end
-  
+
   Module.class_eval do
     def define_from_list()
       def self.from_list(list)
@@ -343,7 +353,6 @@ module Root
 
     def set_palette(name, reverse=false)
       num = 999
-      
       if name == 'b'
         s = [0.0, 0.25, 0.5, 0.75, 1.0]
         r = [0.0, 0.0,  1.0, 1.0,  1.0]
@@ -402,13 +411,13 @@ module Root
       else
         return
       end
-      
+
       if reverse
         r.reverse!
         g.reverse!
         b.reverse!
       end
-      
+
       TColor::CreateGradientColorTable(s.length,
                                        DoubleArray.from_array(s),
                                        DoubleArray.from_array(r),
@@ -436,7 +445,7 @@ module Root
         SetFunctionObject(@function, nx)
       end
     end
-    
+
     def get_fcn(); @function; end
   end
 end
@@ -452,15 +461,15 @@ module RootUtil
     end
     attr_reader :canvas
     attr_accessor :font_size, :title_offset
-    
+
     def add(graph, draw_option='', title='', yRange=nil)
       @graph_list << [graph, draw_option, title, yRange]
     end
-    
+
     def add_same(graph, draw_option, i)
       @same_graph_list << [graph, draw_option, i]
     end
-    
+
     def draw(name, wx, wy, margin=50)
       numPlot = @graph_list.size
       canvasHeight = wy*numPlot+2*margin
@@ -468,12 +477,12 @@ module RootUtil
       RootUtil::gStyle.set_my_style()
       small = 1e-5
       @canvas.Divide(1, numPlot, small, small)
-      
+
       padHeight = wy.to_f/canvasHeight.to_f
       padMargin = margin.to_f/canvasHeight.to_f
       padY2 = 1.0
       padY1 = 1.0-padMargin-padHeight
-      
+
       numPlot.times{|i|
         pad = @canvas.cd(i+1)
         padY1 = 0.0 if i==numPlot-1
@@ -481,7 +490,7 @@ module RootUtil
         # pad.SetFillStyle(4000)
         pad.SetFillColor(0)
         pad.SetFrameFillColor(0)
-        
+
         graph = @graph_list[i][0]
         option = @graph_list[i][1]
         title = @graph_list[i][2]
@@ -512,14 +521,14 @@ module RootUtil
           graph.GetYaxis.SetTitleOffset(@title_offset)
           graph.GetYaxis.SetTickLength(@ytick_length)
         end
-        
+
         # graph.GetXaxis.SetLabelFont(42)
         # graph.GetYaxis.SetLabelFont(42)
         # graph.GetXaxis.SetTitleFont(42)
         # graph.GetYaxis.SetTitleFont(42)
         graph.GetYaxis.SetNdivisions(205)
         # graph.GetYaxis.SetTickLength(0.01)
-        
+
         graph.Draw(option)
         graph.GetYaxis.SetTitle(title)
         graph.GetYaxis.CenterTitle
@@ -535,13 +544,13 @@ module RootUtil
         end
         pad.SetTickx
         pad.SetTicky
-        
+
         padY2 = padY1
         padY1 -= padHeight
       }
       return @canvas
     end
-    
+
     def setXRange(x0, x1, title='')
       @graph_list.last[0].GetXaxis.SetTitle(title)
       @graph_list.last[0].GetXaxis.CenterTitle
@@ -550,7 +559,7 @@ module RootUtil
       }
       return @canvas
     end
-    
+
     def draw_same()
       @same_graph_list.each {|gl|
         graph = gl[0]

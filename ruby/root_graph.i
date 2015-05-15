@@ -75,6 +75,16 @@ public:
     Double_t getEXlow(Int_t i) const { return $self->GetEXlow()[i]; }
     Double_t getEYhigh(Int_t i) const { return $self->GetEYhigh()[i]; }
     Double_t getEYlow(Int_t i) const { return $self->GetEYlow()[i]; }
+
+    TSpline3* GetSpline3(){
+      TSpline3* spline=new TSpline3();
+      if($self->GetN()!=0){
+        using namespace std;
+        cout << "N() = " << $self->GetN() << endl;
+        $self->Eval($self->GetX()[0], spline, "S");
+      }
+      return spline;
+    }
   }
   virtual Double_t     *GetEXlowd()  const;
   virtual Double_t     *GetEXhighd() const;
