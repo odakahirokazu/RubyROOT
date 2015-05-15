@@ -57,10 +57,14 @@
 #ifdef USE_MINUIT2
 #include "Minuit2FunctionMinimizer.hpp"
 #endif
-  %}
+%}
 
 %include <std_string.i>
 %include <carrays.i>
+
+%include <std_vector.i>
+%template(StringVector) std::vector<std::string>;
+%template(FloatVector) std::vector<double>;
 
 %array_class(int, IntArray)
 %array_class(double, DoubleArray)
