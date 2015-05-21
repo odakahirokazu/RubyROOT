@@ -86,7 +86,7 @@ module Root
 
   class TFile
     def self.open(name, option="", &block)
-      f = self.new(name, option)
+      f = self.create(name, option)
       if block_given?
         yield f
         f.Close
@@ -135,7 +135,11 @@ module Root
 
   module TDirectory::Impl
     def Get(name)
-      self.GetTObject(name).auto_cast
+      if(self.GetTObject(name)!=nil)then
+        self.GetTObject(name).auto_cast
+      else
+        nil
+      end
     end
   end
 
