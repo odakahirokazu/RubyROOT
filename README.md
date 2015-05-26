@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.11
+- Version: 0.1.12
 - Author: Hirokazu Odaka
 
 
@@ -55,11 +55,11 @@ the same way. It might be necessary to modify CMake files in this package.
 The author's developing/testing environment is as follows:
 
 - MacBook Pro
-- OS X Yosemite (10.10.1)
-- Apple LLVM version 6.0 (clang-600.0.54) (based on LLVM 3.5svn)
+- OS X Yosemite (10.10.3)
+- Apple LLVM version 6.1.0 (clang-602.0.53) (based on LLVM 3.6.0svn)
 - Homebrew
-- ruby 2.1.5p273 (2014-11-13 revision 48405)
-- ROOT 5.34/22
+- ruby 2.2.2p95 (2015-04-13 revision 50295)
+- ROOT 5.34/26
 
 ### Contributions Are Welcome
 
@@ -84,9 +84,9 @@ Installation
 This package uses CMake (Cross platform make) for easy installation.
 
 #### (3) [Ruby](http://www.ruby-lang.org/en/)
-*version 2.0.0*
+*version 2.1.0*
 
-Ruby 2.0 is required.
+Ruby 2.1 is required.
 
 #### (4) [SWIG](http://www.swig.org/)
 *version 2.0.9 or later*
