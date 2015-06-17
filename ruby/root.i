@@ -65,6 +65,9 @@
 %array_class(int, IntArray)
 %array_class(double, DoubleArray)
 
+%include <std_vector.i>
+%template(DoubleVector) std::vector<double>;
+
 %include "root_types.i"
 %include "root_core.i"
 %include "root_math.i"
