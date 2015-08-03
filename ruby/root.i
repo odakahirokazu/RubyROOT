@@ -51,6 +51,8 @@
 #include <TLegend.h>
 #include <TLegendEntry.h>
 #include <TSpline.h>
+#include <TText.h>
+#include <TLatex.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
@@ -92,4 +94,5 @@
 %include "root_minuit2.i"
 #endif
 %include "root_legend.i"
+%include "root_text.i"
 %include "root_spline.i"

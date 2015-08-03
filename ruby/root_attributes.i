@@ -130,3 +130,18 @@ public:
   virtual void     SetTextSize(Float_t tsize=1) ;
   virtual void     SetTextSizePixels(Int_t npixels);
 };
+
+
+class TAttBBox2D {
+public:
+  virtual ~TAttBBox2D();
+  virtual Rectangle_t     GetBBox()  = 0; //Get TopLeft Corner with width and height
+  virtual TPoint          GetBBoxCenter() = 0;
+  virtual void            SetBBoxCenter(const TPoint &p) = 0;
+  virtual void            SetBBoxCenterX(const Int_t x) = 0;
+  virtual void            SetBBoxCenterY(const Int_t y) = 0;
+  virtual void            SetBBoxX1(const Int_t x) = 0; //set lhs of BB to value
+  virtual void            SetBBoxX2(const Int_t x) = 0; //set rhs of BB to value
+  virtual void            SetBBoxY1(const Int_t y) = 0; //set top of BB to value
+  virtual void            SetBBoxY2(const Int_t y) = 0; //set bottom of BB to value
+};
