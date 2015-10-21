@@ -5,6 +5,7 @@
 class TText : public TNamed, public TAttText, public TAttBBox2D {
 public:
   // TText status bits
+  %rename(KTextNDC) kTextNDC;
   enum { kTextNDC = BIT(14) };
 
   TText();

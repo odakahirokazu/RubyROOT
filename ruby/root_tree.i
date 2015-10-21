@@ -422,6 +422,7 @@ public:
   Int_t get_entry(Long64_t entry=0, Int_t getall=0);
   Long64_t get_entries();
 
+  void set_value_C(const std::string& name, Char_t v);
   void set_value_B(const std::string& name, Char_t v);
   void set_value_S(const std::string& name, Short_t v);
   void set_value_I(const std::string& name, Int_t v);
@@ -434,6 +435,7 @@ public:
   void set_value_D(const std::string& name, Double_t v);
   void set_value_O(const std::string& name, Bool_t v);
 
+  void set_array_C(const std::string& name, int* a);
   void set_array_B(const std::string& name, int* a);
   void set_array_S(const std::string& name, int* a);
   void set_array_I(const std::string& name, int* a);
@@ -446,6 +448,7 @@ public:
   void set_array_D(const std::string& name, double* a);
   void set_array_O(const std::string& name, int* a);
 
+  Char_t get_value_C(const std::string& name);
   Char_t get_value_B(const std::string& name);
   Short_t get_value_S(const std::string& name);
   Int_t get_value_I(const std::string& name);
@@ -458,6 +461,7 @@ public:
   Double_t get_value_D(const std::string& name);
   Bool_t get_value_O(const std::string& name);
 
+  void get_array_C(const std::string& name, int* a);
   void get_array_B(const std::string& name, int* a);
   void get_array_S(const std::string& name, int* a);
   void get_array_I(const std::string& name, int* a);

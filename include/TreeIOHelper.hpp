@@ -22,11 +22,13 @@
 /**
  * @author Hirokazu Odaka
  * @date 2013-04-03
+ * @date 2015-10-20 | add type 'C'
  **/
 
 #ifndef RUBYROOT_TreeIOHelper_H
 #define RUBYROOT_TreeIOHelper_H 1
 
+#include <cstddef>
 #include <iostream>
 #include <sstream>
 #include <map>
@@ -60,7 +62,7 @@ public:
   void set_pointer(void* p) { _pointer = p; }
   void* pointer() const { return _pointer; }
 
-  void set_length(size_t len) { _length = len; }
+  void set_length(std::size_t len) { _length = len; }
   void set_variable_length(const std::string leaf)
   { 
     _length_leaf = leaf;
@@ -69,7 +71,7 @@ public:
   }
 
   bool variable_length() const { return _variable_length; }
-  size_t length() const { return _length; }
+  std::size_t length() const { return _length; }
   std::string length_leaf() const { return _length_leaf; }
 
   void set_type(char t) { _type = t; }
@@ -77,7 +79,8 @@ public:
 
   void finalize()
   {
-    if (_type=='B') __delete_data<Char_t>();
+    if (_type=='C') __delete_data<Char_t>();
+    else if (_type=='B') __delete_data<Char_t>();
     else if (_type=='S') __delete_data<Short_t>();
     else if (_type=='I') __delete_data<Int_t>();
     else if (_type=='L') __delete_data<Long64_t>();
@@ -92,7 +95,7 @@ public:
 
 private:
   void* _pointer;
-  size_t _length;
+  std::size_t _length;
   char _type;
   bool _variable_length;
   std::string _length_leaf;
@@ -131,6 +134,7 @@ public:
     *ptr = v;
   }
 
+  void set_value_C(const std::string& name, Char_t v)    { set_value(name, v); }
   void set_value_B(const std::string& name, Char_t v)    { set_value(name, v); }
   void set_value_S(const std::string& name, Short_t v)   { set_value(name, v); }
   void set_value_I(const std::string& name, Int_t v)     { set_value(name, v); }
@@ -146,10 +150,11 @@ public:
   template <typename T1, typename T2> void set_array(const std::string& name, const T2* a)
   {
     T1* ptr = static_cast<T1*>(data[name].pointer());
-    const size_t len = data[name].length();
-    for (size_t i=0; i<len; i++) { ptr[i] = a[i]; }
+    const std::size_t len = data[name].length();
+    for (std::size_t i=0; i<len; i++) { ptr[i] = a[i]; }
   }
   
+  void set_array_C(const std::string& name, const int* a)    { set_array<Char_t, int>(name, a); }
   void set_array_B(const std::string& name, const int* a)    { set_array<Char_t, int>(name, a); }
   void set_array_S(const std::string& name, const int* a)    { set_array<Short_t, int>(name, a); }
   void set_array_I(const std::string& name, const int* a)    { set_array<Int_t, int>(name, a); }
@@ -168,6 +173,7 @@ public:
     return *ptr;
   }
 
+  Char_t get_value_C(const std::string& name)    { return get_value<Char_t>(name); }
   Char_t get_value_B(const std::string& name)    { return get_value<Char_t>(name); }
   Short_t get_value_S(const std::string& name)   { return get_value<Short_t>(name); }
   Int_t get_value_I(const std::string& name)     { return get_value<Int_t>(name); }
@@ -183,10 +189,11 @@ public:
   template <typename T1, typename T2> void get_array(const std::string& name, T2* a)
   {
     T1* ptr = static_cast<T1*>(data[name].pointer());
-    const size_t len = data[name].length();
-    for (size_t i=0; i<len; i++) { a[i] = ptr[i]; }
+    const std::size_t len = data[name].length();
+    for (std::size_t i=0; i<len; i++) { a[i] = ptr[i]; }
   }
 
+  void get_array_C(const std::string& name, int* a)    { return get_array<Char_t, int>(name, a); }
   void get_array_B(const std::string& name, int* a)    { return get_array<Char_t, int>(name, a); }
   void get_array_S(const std::string& name, int* a)    { return get_array<Short_t, int>(name, a); }
   void get_array_I(const std::string& name, int* a)    { return get_array<Int_t, int>(name, a); }
@@ -215,7 +222,7 @@ public:
       BIter it = data.find(name);
       if (it == data.end()) break;
       void* ptr = (*it).second.pointer();
-      size_t length = (*it).second.length();
+      std::size_t length = (*it).second.length();
       bool variable = (*it).second.variable_length();
       char type = (*it).second.type();
       std::ostringstream leaf;
@@ -232,9 +239,10 @@ public:
     }
   }
 
-  void register_branch(const std::string& name, const std::string& type, size_t length=1, const std::string& leaf_ref="")
+  void register_branch(const std::string& name, const std::string& type, std::size_t length=1, const std::string& leaf_ref="")
   {
-    if (type=="B") __register_branch<Char_t>(name, length, leaf_ref);
+    if (type=="C") __register_branch<Char_t>(name, length, leaf_ref, 'C');
+    else if (type=="B") __register_branch<Char_t>(name, length, leaf_ref);
     else if (type=="S") __register_branch<Short_t>(name, length, leaf_ref);
     else if (type=="I") __register_branch<Int_t>(name, length, leaf_ref);
     else if (type=="L") __register_branch<Long64_t>(name, length, leaf_ref);
@@ -249,7 +257,7 @@ public:
 
 private:
   template <typename T>
-  void __register_branch(const std::string& name, size_t length, const std::string& leaf_ref)
+  void __register_branch(const std::string& name, std::size_t length, const std::string& leaf_ref, char type=0)
   {
     BIter it = data.find(name);
     if (it != data.end()) {
@@ -275,7 +283,12 @@ private:
       info.set_variable_length(leaf_ref);
     }
 
-    info.set_type(type_symbol<T>());
+    if (type) {
+      info.set_type(type);
+    }
+    else {
+      info.set_type(type_symbol<T>());
+    }
     data.insert(std::make_pair(name, info));
     branch_list.push_back(name);
   }
@@ -290,6 +303,6 @@ private:
   TreeIOHelper(const TreeIOHelper&);
 };
 
-}
+} /* namespace rubyroot */
 
 #endif // RUBYROOT_TreeIOHelper_H

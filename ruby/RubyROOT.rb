@@ -147,21 +147,42 @@ module Root
           leaf = l.cast_to(:TLeaf)
           name = leaf.GetBranch.auto_cast.GetName
           type = RootUtil::type_char(leaf.GetTypeName)
+          if leaf.ClassName == "TLeafC"
+            type = 'C'
+          end
           len = leaf.GetLen
           if lc = leaf.GetLeafCount
             len = lc.GetMaximum
           end
           reader.register_branch(name, type, len)
           method = "get_value_of_#{name}".to_sym
-          reader.singleton_class.send(:define_method, method) do
-            if len==1
+          if len==1
+            reader.singleton_class.send(:define_method, method) do
               send("get_value_#{type}".to_sym, name)
-            else
-              if type=='F' || type=='D'
-                a = DoubleArray.new(len)
+            end
+          elsif type=='F' || type=='D'
+            reader.singleton_class.send(:define_method, method) do
+              a = DoubleArray.new(len)
+              send("get_array_#{type}".to_sym, name, a)
+              if lc
+                a.to_a(send("get_value_of_#{lc.GetName}"))
               else
-                a = IntArray.new(len)
+                a.to_a(len)
               end
+            end
+          elsif type=='C'
+            reader.singleton_class.send(:define_method, method) do
+              a = IntArray.new(len)
+              send("get_array_#{type}".to_sym, name, a)
+              if lc
+                a.to_a(send("get_value_of_#{lc.GetName}")).take_while{|c| c!=0}.pack('c*')
+              else
+                a.to_a(len).take_while{|c| c!=0}.pack('c*')
+              end
+            end
+          else
+            reader.singleton_class.send(:define_method, method) do
+              a = IntArray.new(len)
               send("get_array_#{type}".to_sym, name, a)
               if lc
                 a.to_a(send("get_value_of_#{lc.GetName}"))
@@ -207,6 +228,9 @@ module Root
           else
             if type=='F' || type=='D'
               send("set_array_#{type}".to_sym, name, DoubleArray.from_list(value))
+            elsif type=='C'
+              list = value.unpack('c*') << 0
+              send("set_array_#{type}".to_sym, name, IntArray.from_list(list))
             else
               send("set_array_#{type}".to_sym, name, IntArray.from_list(value))
             end
