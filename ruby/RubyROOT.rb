@@ -142,6 +142,7 @@ module Root
   module TTree::Impl
     def read()
       reader = TreeIOHelper.new(self)
+      branches = {}
       self.GetListOfBranches.each do |b|
         b.auto_cast.GetListOfLeaves.each do |l|
           leaf = l.cast_to(:TLeaf)
@@ -155,42 +156,60 @@ module Root
             len = lc.GetMaximum
           end
           reader.register_branch(name, type, len)
+
           method = "get_value_of_#{name}".to_sym
           if len==1
+            branches[name.to_sym] = type.to_s
             reader.singleton_class.send(:define_method, method) do
               send("get_value_#{type}".to_sym, name)
             end
-          elsif type=='F' || type=='D'
-            reader.singleton_class.send(:define_method, method) do
-              a = DoubleArray.new(len)
-              send("get_array_#{type}".to_sym, name, a)
-              if lc
-                a.to_a(send("get_value_of_#{lc.GetName}"))
-              else
-                a.to_a(len)
-              end
-            end
-          elsif type=='C'
-            reader.singleton_class.send(:define_method, method) do
-              a = IntArray.new(len)
-              send("get_array_#{type}".to_sym, name, a)
-              if lc
-                a.to_a(send("get_value_of_#{lc.GetName}")).take_while{|c| c!=0}.pack('c*')
-              else
-                a.to_a(len).take_while{|c| c!=0}.pack('c*')
-              end
-            end
           else
-            reader.singleton_class.send(:define_method, method) do
-              a = IntArray.new(len)
-              send("get_array_#{type}".to_sym, name, a)
+            branches[name.to_sym] = "#{type}[#{len}]"
+            if type=='F' || type=='D'
               if lc
-                a.to_a(send("get_value_of_#{lc.GetName}"))
+                reader.singleton_class.send(:define_method, method) do
+                  a = DoubleArray.new(len)
+                  send("get_array_#{type}".to_sym, name, a)
+                  a.to_a(send("get_value_of_#{lc.GetName}"))
+                end
               else
-                a.to_a(len)
+                reader.singleton_class.send(:define_method, method) do
+                  a = DoubleArray.new(len)
+                  send("get_array_#{type}".to_sym, name, a)
+                  a.to_a(len)
+                end
+              end
+            elsif type=='C'
+              if lc
+                reader.singleton_class.send(:define_method, method) do
+                  a = IntArray.new(len)
+                  send("get_array_#{type}".to_sym, name, a)
+                  a.to_a(send("get_value_of_#{lc.GetName}")).take_while{|c| c!=0}.pack('c*')
+                end
+              else
+                reader.singleton_class.send(:define_method, method) do
+                  a = IntArray.new(len)
+                  send("get_array_#{type}".to_sym, name, a)
+                  a.to_a(len).take_while{|c| c!=0}.pack('c*')
+                end
+              end
+            else
+              if lc
+                reader.singleton_class.send(:define_method, method) do
+                  a = IntArray.new(len)
+                  send("get_array_#{type}".to_sym, name, a)
+                  a.to_a(send("get_value_of_#{lc.GetName}"))
+                end
+              else
+                reader.singleton_class.send(:define_method, method) do
+                  a = IntArray.new(len)
+                  send("get_array_#{type}".to_sym, name, a)
+                  a.to_a(len)
+                end
               end
             end
           end
+
           short_method = name.to_sym
           unless reader.respond_to?(short_method)
             reader.singleton_class.class_eval do
@@ -200,11 +219,13 @@ module Root
         end
       end
       reader.set_branches
+      reader.branches = branches
       reader
     end
 
     def define(**branches)
       writer = TreeIOHelper.new(self)
+      writer.branches = branches
       branches.each do |k, v|
         name = k.to_s
         type = v[0]
@@ -222,20 +243,27 @@ module Root
         end
 
         method = "set_value_of_#{name}".to_sym
-        writer.singleton_class.send(:define_method, method) do |value|
-          if len==1
+        if len==1
+          writer.singleton_class.send(:define_method, method) do |value|
             send("set_value_#{type}".to_sym, name, value)
-          else
-            if type=='F' || type=='D'
+          end
+        else
+          if type=='F' || type=='D'
+            writer.singleton_class.send(:define_method, method) do |value|
               send("set_array_#{type}".to_sym, name, DoubleArray.from_list(value))
-            elsif type=='C'
+            end
+          elsif type=='C'
+            writer.singleton_class.send(:define_method, method) do |value|
               list = value.unpack('c*') << 0
               send("set_array_#{type}".to_sym, name, IntArray.from_list(list))
-            else
+            end
+          else
+            writer.singleton_class.send(:define_method, method) do |value|
               send("set_array_#{type}".to_sym, name, IntArray.from_list(value))
             end
           end
         end
+
         short_method = "#{name}=".to_sym
         unless writer.respond_to?(short_method)
           writer.singleton_class.class_eval do
@@ -249,6 +277,12 @@ module Root
   end
 
   module TreeIOHelper::Impl
+    attr_writer :branches
+
+    def size()
+      get_entries()
+    end
+
     def each()
       get_entries().times do |i|
         get_entry(i)
@@ -256,14 +290,72 @@ module Root
       end
     end
 
-    def [](i)
-      if i<0; i+=size(); end
-      get_entry(i)
-      self
+    def set(name, value)
+      shape = @branches[name.to_sym]
+      type = shape[0]
+      is_array = shape.include?('[')
+
+      if !is_array
+        send("set_value_#{type}".to_sym, name.to_s, value)
+      else
+        if type=='F' || type=='D'
+          send("set_array_#{type}".to_sym, name.to_s, DoubleArray.from_list(value))
+        elsif type=='C'
+          list = value.unpack('c*') << 0
+          send("set_array_#{type}".to_sym, name.to_s, IntArray.from_list(list))
+        else
+          send("set_array_#{type}".to_sym, name.to_s, IntArray.from_list(value))
+        end
+      end
     end
 
-    def size()
-      get_entries()
+    def get(name)
+      shape = @branches[name.to_sym]
+      type = shape[0]
+      is_array = shape.include?('[')
+
+      if !is_array
+        send("get_value_#{type}".to_sym, name.to_s)
+      elsif type=='F' || type=='D'
+        a = DoubleArray.new(len)
+        send("get_array_#{type}".to_sym, name.to_s, a)
+        if lc
+          a.to_a(send("get_value_of_#{lc.GetName}"))
+        else
+          a.to_a(len)
+        end
+      elsif type=='C'
+        a = IntArray.new(len)
+        send("get_array_#{type}".to_sym, name.to_s, a)
+        if lc
+          a.to_a(send("get_value_of_#{lc.GetName}")).take_while{|c| c!=0}.pack('c*')
+        else
+          a.to_a(len).take_while{|c| c!=0}.pack('c*')
+        end
+      else
+        a = IntArray.new(len)
+        send("get_array_#{type}".to_sym, name.to_s, a)
+        if lc
+          a.to_a(send("get_value_of_#{lc.GetName}"))
+        else
+          a.to_a(len)
+        end
+      end
+    end
+
+    def [](key)
+      if key.is_a? Integer
+        i = key
+        if i<0; i+=size(); end
+        get_entry(i)
+        self
+      else
+        get(key)
+      end
+    end
+
+    def []=(name, value)
+      set(name, value)
     end
   end
 
