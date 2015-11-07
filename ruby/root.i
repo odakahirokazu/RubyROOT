@@ -15,6 +15,7 @@
 #include <TSeqCollection.h>
 #include <TList.h>
 #include <TObjArray.h>
+#include <TMap.h>
 #include <TAxis.h>
 #include <TApplication.h>
 #include <TRint.h>

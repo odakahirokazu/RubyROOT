@@ -10,11 +10,14 @@
 }
 
 %template(castIntoTObject) castInto<TObject>;
+%template(castIntoTObjString) castInto<TObjString>;
 %template(castIntoTNamed) castInto<TNamed>;
 %template(castIntoTCollection) castInto<TCollection>;
 %template(castIntoTSeqCollection) castInto<TSeqCollection>;
 %template(castIntoTList) castInto<TList>;
 %template(castIntoTObjArray) castInto<TObjArray>;
+%template(castIntoTKey) castInto<TKey>;
+%template(castIntoTMap) castInto<TMap>;
 %template(castIntoTH1) castInto<TH1>;
 %template(castIntoTH1C) castInto<TH1C>;
 %template(castIntoTH1S) castInto<TH1S>;

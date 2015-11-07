@@ -283,6 +283,12 @@ module Root
       get_entries()
     end
 
+    def move_to(i)
+      if i<0; i+=size(); end
+      get_entry(i)
+      self
+    end
+
     def each()
       get_entries().times do |i|
         get_entry(i)
@@ -316,41 +322,46 @@ module Root
 
       if !is_array
         send("get_value_#{type}".to_sym, name.to_s)
-      elsif type=='F' || type=='D'
-        a = DoubleArray.new(len)
-        send("get_array_#{type}".to_sym, name.to_s, a)
-        if lc
-          a.to_a(send("get_value_of_#{lc.GetName}"))
-        else
-          a.to_a(len)
-        end
-      elsif type=='C'
-        a = IntArray.new(len)
-        send("get_array_#{type}".to_sym, name.to_s, a)
-        if lc
-          a.to_a(send("get_value_of_#{lc.GetName}")).take_while{|c| c!=0}.pack('c*')
-        else
-          a.to_a(len).take_while{|c| c!=0}.pack('c*')
-        end
       else
-        a = IntArray.new(len)
-        send("get_array_#{type}".to_sym, name.to_s, a)
-        if lc
-          a.to_a(send("get_value_of_#{lc.GetName}"))
+        leaf = get_tree.GetLeaf(name)
+        len = leaf.GetLen
+        if lc = leaf.GetLeafCount
+          len = lc.GetMaximum
+        end
+
+        if type=='F' || type=='D'
+          a = DoubleArray.new(len)
+          send("get_array_#{type}".to_sym, name.to_s, a)
+          if lc
+            a.to_a(send("get_value_of_#{lc.GetName}"))
+          else
+            a.to_a(len)
+          end
+        elsif type=='C'
+          a = IntArray.new(len)
+          send("get_array_#{type}".to_sym, name.to_s, a)
+          if lc
+            a.to_a(send("get_value_of_#{lc.GetName}")).take_while{|c| c!=0}.pack('c*')
+          else
+            a.to_a(len).take_while{|c| c!=0}.pack('c*')
+          end
         else
-          a.to_a(len)
+          a = IntArray.new(len)
+          send("get_array_#{type}".to_sym, name.to_s, a)
+          if lc
+            a.to_a(send("get_value_of_#{lc.GetName}"))
+          else
+            a.to_a(len)
+          end
         end
       end
     end
 
-    def [](key)
-      if key.is_a? Integer
-        i = key
-        if i<0; i+=size(); end
-        get_entry(i)
-        self
+    def [](index)
+      if index.is_a? Integer
+        move_to(index)
       else
-        get(key)
+        get(index)
       end
     end
 

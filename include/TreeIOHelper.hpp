@@ -125,6 +125,8 @@ public:
     }
   }
 
+  const TTree* get_tree() { return tree; }
+
   Int_t get_entry(Long64_t entry=0, Int_t getall=0) { return tree->GetEntry(entry, getall); }
   Long64_t get_entries() { return tree->GetEntries(); }
 

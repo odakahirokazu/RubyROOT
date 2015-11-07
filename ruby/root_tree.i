@@ -419,6 +419,7 @@ public:
   explicit TreeIOHelper(TTree* t);
   ~TreeIOHelper();
 
+  const TTree* get_tree();
   Int_t get_entry(Long64_t entry=0, Int_t getall=0);
   Long64_t get_entries();
 

@@ -3,30 +3,33 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.15
+- Version: 0.1.17
 - Author: Hirokazu Odaka
 
 
 Introduction
 ----------------------------------------
 
-RubyROOT is a Ruby binding of [ROOT](http://root.cern.ch/), which is a data
-analysis framework developed by CERN. RubyROOT provides a minimun set of Ruby
-interface to useful ROOT classes including histograms, trees, graphs, and
-canvases. By using this extension library, we get a powerful data analysis
-environment based on the flexibility of Ruby.
+RubyROOT is a Ruby binding of [ROOT](http://root.cern.ch/), which is
+a data analysis framework developed by CERN. RubyROOT provides a
+minimun set of Ruby interface to useful ROOT classes including
+histograms, trees, graphs, and canvases. By using this extension
+library, we get a powerful data analysis environment based on the
+flexibility of Ruby.
 
-ROOT already has a well-designed Ruby binding, "RubyRoot", in the package. But
-this seems not possible to be built with Ruby 2.0. Thus, we have started
-developing of this library.
+ROOT already has a well-designed Ruby binding, "RubyRoot", in the
+package. But this seems not possible to be built with Ruby 2.0. Thus,
+we have started developing of this library.
 
 Currently, this Ruby wapper offers the following ROOT classes:  
-TApplication, TArrow, TAttAxis, TAttBBox2D, TAttFill, TAttLine, TAttMarker, TAttPad, TAttText,
-TAxis, TBox, TBranch, TCanvas, TChain, TCollection, TColor, TDirectory,
-TDirectoryFile, TEllipse, TF1, TFile, TFormula, TGraph, TGraphAsymmErrors,
-TGraphErrors, TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I,
-TH2S, TH3, TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLatex, TLeaf, TLegend, TLine, TList, TNamed,
-TObjArray, TObjString, TObject, TPad, TRint, TROOT, TRandom, TRandom3, TSeqCollection,
+TApplication, TArrow, TAttAxis, TAttBBox2D, TAttFill, TAttLine,
+TAttMarker, TAttPad, TAttText, TAxis, TBox, TBranch, TCanvas,
+TChain, TCollection, TColor, TDirectory, TDirectoryFile, TEllipse,
+TF1, TFile, TFormula, TGraph, TGraphAsymmErrors, TGraphErrors,
+TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I,
+TH2S, TH3, TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLatex, TLeaf,
+TLegend, TLine, TList, TMap, TNamed, TObjArray, TObjString, TObject,
+TPair, TPad, TRint, TROOT, TRandom, TRandom3, TSeqCollection,
 TString, TStyle, TSpline, TText, TTree, TVirtualPad.
 
 ### Contact
@@ -46,25 +49,27 @@ https://github.com/odakahirokazu/RubyROOT/
 
 #### Note for Linux users
 
-It should be possible to install RubyROOT on Linux though we have not tested
-yet. You need to install the same software descibed below and then please try
-the same way. It might be necessary to modify CMake files in this package.
+It should be possible to install RubyROOT on Linux though we have not
+tested yet. You need to install the same software descibed below and
+then please try the same way. It might be necessary to modify CMake
+files in this package.
 
 #### Test environment
 
 The author's developing/testing environment is as follows:
 
 - MacBook Pro
-- OS X Yosemite (10.10.3)
-- Apple LLVM version 6.1.0 (clang-602.0.53) (based on LLVM 3.6.0svn)
+- OS X Yosemite (10.11.1)
+- Apple LLVM version 7.0.0 (clang-700.1.76)
 - Homebrew
-- ruby 2.2.2p95 (2015-04-13 revision 50295)
-- ROOT 5.34/26
+- ruby 2.2.3p173 (2015-08-18 revision 51636)
+- ROOT 5.34/34
+- SWIG Version 3.0.7
 
 ### Contributions Are Welcome
 
-Contributions of any kind including documentation, testing, and coding are very
-welcome.
+Contributions of any kind including documentation, testing, and
+coding are very welcome.
 
 ### Licence
 
@@ -79,7 +84,7 @@ Installation
 #### (1) C++ compliler
 
 #### (2) [CMake](http://www.cmake.org/)
-*version 2.8.11 or later*
+*version 3.0 or later*
 
 This package uses CMake (Cross platform make) for easy installation.
 
@@ -89,7 +94,7 @@ This package uses CMake (Cross platform make) for easy installation.
 Ruby 2.1 is required.
 
 #### (4) [SWIG](http://www.swig.org/)
-*version 2.0.9 or later*
+*version 3.0.7 or later*
 
 SWIG (Simplified Wrapper and Interface Generator) provides an easy way to
 generate extended libraries of various scripting languages.
