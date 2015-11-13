@@ -135,7 +135,11 @@ module Root
 
   module TDirectory::Impl
     def Get(name)
-      self.GetTObject(name).auto_cast
+      if obj = self.GetTObject(name)
+        obj.auto_cast
+      else
+        nil
+      end
     end
   end
 
