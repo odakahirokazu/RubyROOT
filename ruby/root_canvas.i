@@ -2,6 +2,50 @@
 /* Canvas classes                                                         */
 /**************************************************************************/
 
+class TWbox : public TBox {
+public:
+   TWbox();
+   TWbox(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2,
+         Color_t color=18, Short_t bordersize=5 ,Short_t bordermode=1);
+   TWbox(const TWbox &wbox);
+   virtual ~TWbox();
+
+   void          Copy(TObject &wbox) const;
+   virtual void  Draw(Option_t *option="");
+   virtual void  DrawWbox(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2,
+                      Color_t color=33 ,Short_t bordersize=5 ,Short_t bordermode=-1);
+   virtual void  ExecuteEvent(Int_t event, Int_t px, Int_t py);
+   Short_t       GetBorderMode() const { return fBorderMode;}
+   Short_t       GetBorderSize() const { return fBorderSize;}
+   Int_t         GetDarkColor() const  {return TColor::GetColorDark(GetFillColor());}
+   Int_t         GetLightColor() const {return TColor::GetColorBright(GetFillColor());}
+   virtual void  Paint(Option_t *option="");
+   virtual void  PaintFrame(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2,
+                            Color_t color, Short_t bordersize, Short_t bordermode,
+                            Bool_t tops);
+   virtual void  PaintWbox(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2,
+                 Color_t color=33, Short_t bordersize=5, Short_t bordermode=-1);
+   virtual void  SavePrimitive(ostream &out, Option_t *option = "");
+   virtual void  SetBorderMode(Short_t bordermode) {fBorderMode = bordermode;} // *MENU*
+   virtual void  SetBorderSize(Short_t bordersize) {fBorderSize = bordersize;} // *MENU*
+};
+
+class TFrame : public TWbox {
+public:
+   TFrame();
+   TFrame(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2);
+   TFrame(const TFrame &frame);
+   virtual ~TFrame();
+   void  Copy(TObject &frame) const;
+   virtual void  Draw(Option_t *option="");
+   virtual void  ExecuteEvent(Int_t event, Int_t px, Int_t py);
+   virtual void  Paint(Option_t *option="");
+   virtual void  Pop();
+   virtual void  SavePrimitive(ostream &out, Option_t *option = "");
+   virtual void  UseCurrentStyle();  // *MENU*
+};
+
+
 %nodefault;
 class TVirtualPad : public TObject, public TAttLine, public TAttFill, public TAttPad
 {

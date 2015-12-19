@@ -54,6 +54,8 @@
 #include <TSpline.h>
 #include <TText.h>
 #include <TLatex.h>
+#include <TWbox.h>
+#include <TFrame.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
