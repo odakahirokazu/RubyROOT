@@ -133,6 +133,7 @@ public:
   virtual const TArrayD *GetSumw2() const;
   virtual Int_t    GetSumw2N() const;
   virtual Double_t GetRMS(Int_t axis=1) const;
+  virtual Double_t 	GetStdDev (Int_t axis=1) const;
   virtual Double_t GetRMSError(Int_t axis=1) const;
   virtual Double_t GetSkewness(Int_t axis=1) const;
   TAxis   *GetXaxis() const;
