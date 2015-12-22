@@ -17,7 +17,7 @@ public:
   virtual void     SaveLineAttributes(ostream &out, const char *name, Int_t coldef=1, Int_t stydef=1, Int_t widdef=1);
   virtual void     SetLineAttributes(); // *MENU*
   virtual void     SetLineColor(Color_t lcolor);
-  virtual void  SetLineColorAlpha (Color_t lcolor, Float_t lalpha);
+  virtual void     SetLineColorAlpha (Color_t lcolor, Float_t lalpha);
   virtual void     SetLineStyle(Style_t lstyle);
   virtual void     SetLineWidth(Width_t lwidth);
 };
@@ -38,7 +38,7 @@ public:
   virtual void     SaveFillAttributes(ostream &out, const char *name, Int_t coldef=1, Int_t stydef=1001);
   virtual void     SetFillAttributes(); // *MENU*
   virtual void     SetFillColor(Color_t fcolor);
-  virtual void  SetFillColorAlpha (Color_t fcolor, Float_t falpha);
+  virtual void     SetFillColorAlpha (Color_t fcolor, Float_t falpha);
   virtual void     SetFillStyle(Style_t fstyle);
 };
 
@@ -58,7 +58,7 @@ public:
   virtual void     SaveMarkerAttributes(ostream &out, const char *name, Int_t coldef=1, Int_t stydef=1, Int_t sizdef=1);
   virtual void     SetMarkerAttributes();  // *MENU*
   virtual void     SetMarkerColor(Color_t tcolor=1);
-  virtual void  SetMarkerColorAlpha (Color_t mcolor, Float_t malpha);
+  virtual void     SetMarkerColorAlpha (Color_t mcolor, Float_t malpha);
   virtual void     SetMarkerStyle(Style_t mstyle=1);
   virtual void     SetMarkerSize(Size_t msize=1);
 };
