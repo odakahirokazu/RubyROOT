@@ -436,18 +436,18 @@ public:
   void set_value_D(const std::string& name, Double_t v);
   void set_value_O(const std::string& name, Bool_t v);
 
-  void set_array_C(const std::string& name, int* a);
-  void set_array_B(const std::string& name, int* a);
-  void set_array_S(const std::string& name, int* a);
-  void set_array_I(const std::string& name, int* a);
-  void set_array_L(const std::string& name, int* a);
-  void set_array_b(const std::string& name, int* a);
-  void set_array_s(const std::string& name, int* a);
-  void set_array_i(const std::string& name, int* a);
-  void set_array_l(const std::string& name, int* a);
-  void set_array_F(const std::string& name, double* a);
-  void set_array_D(const std::string& name, double* a);
-  void set_array_O(const std::string& name, int* a);
+  void set_array_C(const std::string& name, int* a, std::size_t n);
+  void set_array_B(const std::string& name, int* a, std::size_t n);
+  void set_array_S(const std::string& name, int* a, std::size_t n);
+  void set_array_I(const std::string& name, int* a, std::size_t n);
+  void set_array_L(const std::string& name, int* a, std::size_t n);
+  void set_array_b(const std::string& name, int* a, std::size_t n);
+  void set_array_s(const std::string& name, int* a, std::size_t n);
+  void set_array_i(const std::string& name, int* a, std::size_t n);
+  void set_array_l(const std::string& name, int* a, std::size_t n);
+  void set_array_F(const std::string& name, double* a, std::size_t n);
+  void set_array_D(const std::string& name, double* a, std::size_t n);
+  void set_array_O(const std::string& name, int* a, std::size_t n);
 
   Char_t get_value_C(const std::string& name);
   Char_t get_value_B(const std::string& name);

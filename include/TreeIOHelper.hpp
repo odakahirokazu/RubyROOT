@@ -33,6 +33,7 @@
 #include <sstream>
 #include <map>
 #include <list>
+#include <algorithm>
 #include <Rtypes.h>
 #include <TTree.h>
 
@@ -149,25 +150,37 @@ public:
   void set_value_D(const std::string& name, Double_t v)  { set_value(name, v); }
   void set_value_O(const std::string& name, Bool_t v)    { set_value(name, v); }
 
-  template <typename T1, typename T2> void set_array(const std::string& name, const T2* a)
+  template <typename T1, typename T2> void set_array(const std::string& name, const T2* a, std::size_t n)
   {
     T1* ptr = static_cast<T1*>(data[name].pointer());
-    const std::size_t len = data[name].length();
+    const std::size_t len = std::min(data[name].length(), n);
     for (std::size_t i=0; i<len; i++) { ptr[i] = a[i]; }
   }
   
-  void set_array_C(const std::string& name, const int* a)    { set_array<Char_t, int>(name, a); }
-  void set_array_B(const std::string& name, const int* a)    { set_array<Char_t, int>(name, a); }
-  void set_array_S(const std::string& name, const int* a)    { set_array<Short_t, int>(name, a); }
-  void set_array_I(const std::string& name, const int* a)    { set_array<Int_t, int>(name, a); }
-  void set_array_L(const std::string& name, const int* a)    { set_array<Long64_t, int>(name, a); }
-  void set_array_b(const std::string& name, const int* a)    { set_array<UChar_t, int>(name, a); }
-  void set_array_s(const std::string& name, const int* a)    { set_array<UShort_t, int>(name, a); }
-  void set_array_i(const std::string& name, const int* a)    { set_array<UInt_t, int>(name, a); }
-  void set_array_l(const std::string& name, const int* a)    { set_array<ULong64_t, int>(name, a); }
-  void set_array_F(const std::string& name, const double* a) { set_array<Float_t, double>(name, a); }
-  void set_array_D(const std::string& name, const double* a) { set_array<Double_t, double>(name, a); }
-  void set_array_O(const std::string& name, const int* a)    { set_array<Bool_t, int>(name, a); }
+  void set_array_C(const std::string& name, const int* a, std::size_t n)
+  { set_array<Char_t, int>(name, a, n); }
+  void set_array_B(const std::string& name, const int* a, std::size_t n)
+  { set_array<Char_t, int>(name, a, n); }
+  void set_array_S(const std::string& name, const int* a, std::size_t n)
+  { set_array<Short_t, int>(name, a, n); }
+  void set_array_I(const std::string& name, const int* a, std::size_t n)
+  { set_array<Int_t, int>(name, a, n); }
+  void set_array_L(const std::string& name, const int* a, std::size_t n)
+  { set_array<Long64_t, int>(name, a, n); }
+  void set_array_b(const std::string& name, const int* a, std::size_t n)
+  { set_array<UChar_t, int>(name, a, n); }
+  void set_array_s(const std::string& name, const int* a, std::size_t n)
+  { set_array<UShort_t, int>(name, a, n); }
+  void set_array_i(const std::string& name, const int* a, std::size_t n)
+  { set_array<UInt_t, int>(name, a, n); }
+  void set_array_l(const std::string& name, const int* a, std::size_t n)
+  { set_array<ULong64_t, int>(name, a, n); }
+  void set_array_F(const std::string& name, const double* a, std::size_t n)
+  { set_array<Float_t, double>(name, a, n); }
+  void set_array_D(const std::string& name, const double* a, std::size_t n)
+  { set_array<Double_t, double>(name, a, n); }
+  void set_array_O(const std::string& name, const int* a, std::size_t n)
+  { set_array<Bool_t, int>(name, a, n); }
 
   template <typename T> T get_value(const std::string& name)
   {

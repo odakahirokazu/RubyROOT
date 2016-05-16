@@ -254,16 +254,19 @@ module Root
         else
           if type=='F' || type=='D'
             writer.singleton_class.send(:define_method, method) do |value|
-              send("set_array_#{type}".to_sym, name, DoubleArray.from_list(value))
+              send("set_array_#{type}".to_sym,
+                   name, DoubleArray.from_list(value), value.size)
             end
           elsif type=='C'
             writer.singleton_class.send(:define_method, method) do |value|
               list = value.unpack('c*') << 0
-              send("set_array_#{type}".to_sym, name, IntArray.from_list(list))
+              send("set_array_#{type}".to_sym,
+                   name, IntArray.from_list(list), list.size)
             end
           else
             writer.singleton_class.send(:define_method, method) do |value|
-              send("set_array_#{type}".to_sym, name, IntArray.from_list(value))
+              send("set_array_#{type}".to_sym,
+                   name, IntArray.from_list(value), value.size)
             end
           end
         end
@@ -309,12 +312,15 @@ module Root
         send("set_value_#{type}".to_sym, name.to_s, value)
       else
         if type=='F' || type=='D'
-          send("set_array_#{type}".to_sym, name.to_s, DoubleArray.from_list(value))
+          send("set_array_#{type}".to_sym,
+               name.to_s, DoubleArray.from_list(value), value.size)
         elsif type=='C'
           list = value.unpack('c*') << 0
-          send("set_array_#{type}".to_sym, name.to_s, IntArray.from_list(list))
+          send("set_array_#{type}".to_sym,
+               name.to_s, IntArray.from_list(list), list.size)
         else
-          send("set_array_#{type}".to_sym, name.to_s, IntArray.from_list(value))
+          send("set_array_#{type}".to_sym,
+               name.to_s, IntArray.from_list(value), value.size)
         end
       end
     end
