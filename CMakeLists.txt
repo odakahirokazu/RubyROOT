@@ -14,6 +14,7 @@ set(CMAKE_C_FLAGS_RELEASE "-O3 -W -Wall" CACHE STRING "C_FLAGS for release")
 project(RubyROOT)
 message("-- Install destination prefix: ${CMAKE_INSTALL_PREFIX}")
 set(CMAKE_MODULE_PATH ${RubyROOT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+add_definitions("-std=c++11")
 
 ### Options
 option(ENABLE_MINUIT2 "enable Munuit2" ON)
@@ -31,7 +32,7 @@ find_path(ROOT_LIB_DIR
   NAMES libHist.so libTree.so
   PATHS ${ROOTSYS}/lib/root ${ROOTSYS}/lib)
 set(ROOT_LIB
-  Core Cint RIO Net Hist Graf Graf3d Gpad Tree
+  Core RIO Net Hist Graf Graf3d Gpad Tree
   Rint Postscript Matrix Physics MathCore Thread
   ${ROOT_MINUIT2_LIB})
 message("-- ROOTSYS = ${ROOTSYS}")

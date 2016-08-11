@@ -1,10 +1,9 @@
 // 3D-histogram
 
+%nodefault;
 class TH3 : public TH1 /*, public TAtt3D */
 {
 public:
-  TH3(const TH3&);
-  virtual ~TH3();
   virtual Int_t    BufferEmpty(Int_t action=0);
   virtual void     Copy(TObject &hnew) const;
   virtual Int_t    Fill(Double_t x, Double_t y, Double_t z);
@@ -58,6 +57,7 @@ public:
   virtual void     Reset(Option_t *option="");
   virtual void     SetShowProjection(const char *option="xy",Int_t nbins=1);
 };
+%default;
 
 
 class TH3C : public TH3

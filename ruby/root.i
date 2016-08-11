@@ -62,7 +62,7 @@
 #ifdef USE_MINUIT2
 #include "Minuit2FunctionMinimizer.hpp"
 #endif
-  %}
+%}
 
 %include <std_string.i>
 %include <carrays.i>
@@ -93,9 +93,10 @@
 %include "root_cast.i"
 %include "root_random.i"
 %include "root_string.i"
-#ifdef USE_MINUIT2
-%include "root_minuit2.i"
-#endif
 %include "root_legend.i"
 %include "root_text.i"
 %include "root_spline.i"
+
+#ifdef USE_MINUIT2
+%include "root_minuit2.i"
+#endif

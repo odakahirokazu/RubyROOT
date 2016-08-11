@@ -34,7 +34,7 @@ public:
   virtual void  PaintPaveArc(Double_t x1, Double_t y1,Double_t x2 ,Double_t y2,
                              Int_t bordersize=4 ,Option_t *option="br");
   virtual void  Print(Option_t *option="") const;
-  virtual void  SavePrimitive(ostream &out, Option_t *option = "");
+  virtual void  SavePrimitive(std::ostream &out, Option_t *option = "");
   virtual void  SetBorderSize(Int_t bordersize=4);
   virtual void  SetCornerRadius(Double_t rad = 0.2);
   virtual void  SetName(const char *name="");
@@ -63,7 +63,7 @@ public:
   virtual TObject      *GetObject() const;
   virtual Option_t     *GetOption() const;
   virtual void          Print( Option_t *option = "" ) const;
-  virtual void          SaveEntry( ostream &out, const char *name );
+  virtual void          SaveEntry( std::ostream &out, const char *name );
   virtual void          SetLabel( const char *label = "" );
   virtual void          SetObject(TObject* obj );
   virtual void          SetObject( const char *objectName );  // *MENU*
@@ -103,7 +103,7 @@ public:
   virtual void    PaintPrimitives();
   virtual void    Print( Option_t* option = "" ) const;
   virtual void    RecursiveRemove(TObject *obj);
-  virtual void    SavePrimitive(ostream &out, Option_t *option  = "");
+  virtual void    SavePrimitive(std::ostream &out, Option_t *option  = "");
   void            SetDefaults();
   void            SetColumnSeparation( Float_t columnSeparation );
   virtual void    SetEntryLabel( const char* label ); // *MENU*

@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.1.21
+- Version: 0.2.0
 - Author: Hirokazu Odaka
 
 
@@ -34,9 +34,9 @@ TString, TStyle, TSpline, TText, TTree, TVirtualPad.
 
 ### Contact
 
-- Hirokazu Odaka 
-- ISAS/JAXA
-- odaka(AT)astro.isas.jaxa.jp
+- Hirokazu Odaka
+- KIPAC, Stanford University
+- hodaka(AT)stanford.edu
 
 ### GitHub
 
@@ -54,17 +54,22 @@ tested yet. You need to install the same software descibed below and
 then please try the same way. It might be necessary to modify CMake
 files in this package.
 
+#### Note for ROOT5 users
+
+If you want to use ROOT5, you can use version 0.1.21, which is the
+latest version compatible to ROOT5. Version 0.2 and later support
+ROOT6 only.
+
 #### Test environment
 
 The author's developing/testing environment is as follows:
 
-- MacBook Pro
-- OS X Yosemite (10.11.1)
-- Apple LLVM version 7.0.0 (clang-700.1.76)
-- Homebrew
-- ruby 2.2.3p173 (2015-08-18 revision 51636)
-- ROOT 5.34/34
-- SWIG Version 3.0.7
+- iMac 27-inch late 2015
+- OS X El Capitan (10.11.6)
+- Apple LLVM version 7.3.0 (clang-703.0.31)
+- ruby 2.3.1p112 (2016-04-26 revision 54768)
+- ROOT 6.06/06
+- SWIG Version 3.0.10
 
 ### Contributions Are Welcome
 
@@ -84,23 +89,21 @@ Installation
 #### (1) C++ compliler
 
 #### (2) [CMake](http://www.cmake.org/)
-*version 3.0 or later*
+*version 3.0.10 or later*
 
 This package uses CMake (Cross platform make) for easy installation.
 
 #### (3) [Ruby](http://www.ruby-lang.org/en/)
-*version 2.1.0*
-
-Ruby 2.1 is required.
+*version 2.3.1*
 
 #### (4) [SWIG](http://www.swig.org/)
-*version 3.0.7 or later*
+*version 3.0.10 or later*
 
 SWIG (Simplified Wrapper and Interface Generator) provides an easy way to
 generate extended libraries of various scripting languages.
 
 #### (5) [ROOT](http://root.cern.ch/)
-*version 5.34/19 or later*
+*version 6.06/06 or later*
 
 A data analysis framework.
 

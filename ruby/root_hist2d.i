@@ -1,10 +1,9 @@
 // 2D-histogram
 
+%nodefault;
 class TH2 : public TH1
 {
 public:
-  TH2(const TH2&);
-  virtual ~TH2();
   virtual Int_t    BufferEmpty(Int_t action=0);
   virtual void     Copy(TObject &hnew) const;
   virtual Int_t    Fill(Double_t x, Double_t y);
@@ -56,6 +55,7 @@ public:
   virtual Int_t    ShowPeaks(Double_t sigma=2, Option_t *option="", Double_t threshold=0.05); // *MENU*
   virtual void     Smooth(Int_t ntimes=1, Option_t *option=""); // *MENU*
 };
+%default;
 
 
 class TH2C : public TH2

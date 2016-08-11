@@ -2,23 +2,20 @@
 /* Basic classes                                                          */
 /**************************************************************************/
 
-class TObject
-{
-public:
-  %rename(KCanDelete) kCanDelete;
-  enum EStatusBits {
-    kCanDelete
-  };
-  
+class TObject {
+protected:
+  void MakeZombie() { fBits |= kZombie; }
+  virtual void DoError(int level, const char *location, const char *fmt, va_list va) const;
+
 public:
   TObject();
   TObject(const TObject &object);
   virtual ~TObject();
-  
+
   virtual void        AppendPad(Option_t *option="");
   virtual void        Browse(TBrowser *b);
   virtual const char *ClassName() const;
-  virtual void        Clear(Option_t * /*option*/ ="");
+  virtual void        Clear(Option_t * /*option*/ ="") { }
   virtual TObject    *Clone(const char *newname="") const;
   virtual Int_t       Compare(const TObject *obj) const;
   virtual void        Copy(TObject &object) const;
@@ -37,7 +34,7 @@ public:
   virtual UInt_t      GetUniqueID() const;
   virtual const char *GetName() const;
   virtual const char *GetIconName() const;
-  virtual Option_t   *GetOption() const;
+  virtual Option_t   *GetOption() const { return ""; }
   virtual char       *GetObjectInfo(Int_t px, Int_t py) const;
   virtual const char *GetTitle() const;
   virtual Bool_t      HandleTimer(TTimer *timer);
@@ -47,9 +44,9 @@ public:
   virtual void        Inspect() const; // *MENU*
   virtual Bool_t      IsFolder() const;
   virtual Bool_t      IsEqual(const TObject *obj) const;
-  virtual Bool_t      IsSortable() const;
-  Bool_t      IsOnHeap() const;
-  Bool_t      IsZombie() const;
+  virtual Bool_t      IsSortable() const { return kFALSE; }
+  Bool_t      IsOnHeap() const { return TestBit(kIsOnHeap); }
+  Bool_t      IsZombie() const { return TestBit(kZombie); }
   virtual Bool_t      Notify();
   virtual void        ls(Option_t *option="") const;
   virtual void        Paint(Option_t *option="");
@@ -58,7 +55,7 @@ public:
   virtual Int_t       Read(const char *name);
   virtual void        RecursiveRemove(TObject *obj);
   virtual void        SaveAs(const char *filename="",Option_t *option="") const; // *MENU*
-  virtual void        SavePrimitive(ostream &out, Option_t *option = "");
+  virtual void        SavePrimitive(std::ostream &out, Option_t *option = "");
   virtual void        SetDrawOption(Option_t *option="");  // *MENU*
   virtual void        SetUniqueID(UInt_t uid);
   virtual void        UseCurrentStyle();
@@ -67,11 +64,38 @@ public:
 
   //----- bit manipulation
   void     SetBit(UInt_t f, Bool_t set);
-  void     SetBit(UInt_t f);
-  void     ResetBit(UInt_t f);
-  Bool_t   TestBit(UInt_t f) const;
-  Int_t    TestBits(UInt_t f) const;
-  void     InvertBit(UInt_t f);
+  void     SetBit(UInt_t f) { fBits |= f & kBitMask; }
+  void     ResetBit(UInt_t f) { fBits &= ~(f & kBitMask); }
+  Bool_t   TestBit(UInt_t f) const { return (Bool_t) ((fBits & f) != 0); }
+  Int_t    TestBits(UInt_t f) const { return (Int_t) (fBits & f); }
+  void     InvertBit(UInt_t f) { fBits ^= f & kBitMask; }
+
+  //---- error handling
+  virtual void     Info(const char *method, const char *msgfmt, ...) const
+#if defined(__GNUC__) && !defined(__CINT__)
+    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
+#endif
+    ;
+  virtual void     Warning(const char *method, const char *msgfmt, ...) const
+#if defined(__GNUC__) && !defined(__CINT__)
+    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
+#endif
+    ;
+  virtual void     Error(const char *method, const char *msgfmt, ...) const
+#if defined(__GNUC__) && !defined(__CINT__)
+    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
+#endif
+    ;
+  virtual void     SysError(const char *method, const char *msgfmt, ...) const
+#if defined(__GNUC__) && !defined(__CINT__)
+    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
+#endif
+    ;
+  virtual void     Fatal(const char *method, const char *msgfmt, ...) const
+#if defined(__GNUC__) && !defined(__CINT__)
+    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
+#endif
+    ;
 
   void     AbstractMethod(const char *method) const;
   void     MayNotUse(const char *method) const;
@@ -82,26 +106,28 @@ public:
   static void      SetDtorOnly(void *obj);
   static Bool_t    GetObjectStat();
   static void      SetObjectStat(Bool_t stat);
+
+  friend class TClonesArray; // needs to reset kNotDeleted in fBits
 };
 
 
-class TNamed : public TObject
-{
+class TNamed : public TObject {
 public:
-  TNamed();
-  TNamed(const char *name, const char *title);
-  //// TNamed(const TString &name, const TString &title);
+  TNamed(): fName(), fTitle() { }
+  TNamed(const char *name, const char *title) : fName(name), fTitle(title) { }
+  TNamed(const TString &name, const TString &title) : fName(name), fTitle(title) { }
   TNamed(const TNamed &named);
-  virtual ~TNamed();
+
+  virtual ~TNamed() { }
   virtual void     Clear(Option_t *option ="");
   virtual TObject *Clone(const char *newname="") const;
   virtual Int_t    Compare(const TObject *obj) const;
   virtual void     Copy(TObject &named) const;
   virtual void     FillBuffer(char *&buffer);
-  virtual const char  *GetName() const;
-  virtual const char  *GetTitle() const;
-  virtual ULong_t  Hash() const;
-  virtual Bool_t   IsSortable() const;
+  virtual const char  *GetName() const { return fName; }
+  virtual const char  *GetTitle() const { return fTitle; }
+  virtual ULong_t  Hash() const { return fName.Hash(); }
+  virtual Bool_t   IsSortable() const { return kTRUE; }
   virtual void     SetName(const char *name); // *MENU*
   virtual void     SetNameTitle(const char *name, const char *title);
   virtual void     SetTitle(const char *title=""); // *MENU*
@@ -111,15 +137,9 @@ public:
 };
 
 
-class TDirectory : public TNamed
-{
-public:
-  /** @class Context
-   *
-   *  Small helper to keep current directory context.
-   *  Automatically reverts to "old" directory
-   */
-  class TContext;
+class TDirectory : public TNamed {
+protected:
+  TDirectory(const TDirectory &directory);  //Directories cannot be copied
 
 public:
   TDirectory();
@@ -128,13 +148,14 @@ public:
   static  void        AddDirectory(Bool_t add=kTRUE);
   static  Bool_t      AddDirectoryStatus();
   virtual void        Append(TObject *obj, Bool_t replace = kFALSE);
-  virtual void        Add(TObject *obj, Bool_t replace = kFALSE);
-  virtual Int_t       AppendKey(TKey *);
+  virtual void        Add(TObject *obj, Bool_t replace = kFALSE) { Append(obj,replace); }
+  virtual Int_t       AppendKey(TKey *) {return 0;}
   virtual void        Browse(TBrowser *b);
   virtual void        Build(TFile* motherFile = 0, TDirectory* motherDir = 0);
   virtual void        Clear(Option_t *option="");
   virtual TObject    *CloneObject(const TObject *obj, Bool_t autoadd = kTRUE);
   virtual void        Close(Option_t *option="");
+
   // static TDirectory *&CurrentDirectory();  // Return the current directory for this thread.
   %extend {
     static TDirectory* CurrentDirectory()
@@ -144,94 +165,183 @@ public:
       return dir;
     }
   }
-  virtual void        Copy(TObject &) const;
+
+  virtual void        Copy(TObject &) const { MayNotUse("Copy(TObject &)"); }
   virtual Bool_t      cd(const char *path = 0);
   virtual void        DeleteAll(Option_t *option="");
   virtual void        Delete(const char *namecycle="");
   virtual void        Draw(Option_t *option="");
-  virtual TKey       *FindKey(const char * /*keyname*/) const;
-  virtual TKey       *FindKeyAny(const char * /*keyname*/) const;
+  virtual TKey       *FindKey(const char * /*keyname*/) const {return 0;}
+  virtual TKey       *FindKeyAny(const char * /*keyname*/) const {return 0;}
   virtual TObject    *FindObject(const char *name) const;
   virtual TObject    *FindObject(const TObject *obj) const;
   virtual TObject    *FindObjectAny(const char *name) const;
-  virtual TObject    *FindObjectAnyFile(const char * /*name*/) const;
-  %rename(GetTObject) Get(const char *namecycle);
+  virtual TObject    *FindObjectAnyFile(const char * /*name*/) const {return 0;}
   virtual TObject    *Get(const char *namecycle);
   virtual TDirectory *GetDirectory(const char *namecycle, Bool_t printError = false, const char *funcname = "GetDirectory");
-  template <class T> inline void GetObject(const char* namecycle, T*& ptr);
+
+  %rename(GetTObject) Get(const char *namecycle);
+
+  template <class T> inline void GetObject(const char* namecycle, T*& ptr) // See TDirectory::Get for information
+  {
+    ptr = (T*)GetObjectChecked(namecycle,TBuffer::GetClass(typeid(T)));
+  }
   virtual void       *GetObjectChecked(const char *namecycle, const char* classname);
   virtual void       *GetObjectChecked(const char *namecycle, const TClass* cl);
   virtual void       *GetObjectUnchecked(const char *namecycle);
-  virtual Int_t       GetBufferSize() const;
-  virtual TFile      *GetFile() const;
-  virtual TKey       *GetKey(const char * /*name */, Short_t /* cycle */=9999) const;
-  virtual TList      *GetList() const;
-  virtual TList      *GetListOfKeys() const;
-  virtual TObject    *GetMother() const;
-  virtual TDirectory *GetMotherDir() const;
-  virtual Int_t       GetNbytesKeys() const;
-  virtual Int_t       GetNkeys() const;
-  virtual Long64_t    GetSeekDir() const;
-  virtual Long64_t    GetSeekParent() const;
-  virtual Long64_t    GetSeekKeys() const;
+  virtual Int_t       GetBufferSize() const {return 0;}
+  virtual TFile      *GetFile() const { return 0; }
+  virtual TKey       *GetKey(const char * /*name */, Short_t /* cycle */=9999) const {return 0;}
+  virtual TList      *GetList() const { return fList; }
+  virtual TList      *GetListOfKeys() const { return 0; }
+  virtual TObject    *GetMother() const { return fMother; }
+  virtual TDirectory *GetMotherDir() const { return fMother==0 ? 0 : dynamic_cast<TDirectory*>(fMother); }
+  virtual Int_t       GetNbytesKeys() const { return 0; }
+  virtual Int_t       GetNkeys() const { return 0; }
+  virtual Long64_t    GetSeekDir() const { return 0; }
+  virtual Long64_t    GetSeekParent() const { return 0; }
+  virtual Long64_t    GetSeekKeys() const { return 0; }
   virtual const char *GetPathStatic() const;
   virtual const char *GetPath() const;
-  TUUID               GetUUID() const;
-  virtual Bool_t      IsFolder() const;
-  virtual Bool_t      IsModified() const;
-  virtual Bool_t      IsWritable() const;
+  TUUID               GetUUID() const {return fUUID;}
+  virtual Bool_t      IsFolder() const { return kTRUE; }
+  virtual Bool_t      IsModified() const { return kFALSE; }
+  virtual Bool_t      IsWritable() const { return kFALSE; }
   virtual void        ls(Option_t *option="") const;
   virtual TDirectory *mkdir(const char *name, const char *title="");
   virtual TFile      *OpenFile(const char * /*name*/, Option_t * /*option*/ = "",
                                const char * /*ftitle*/ = "", Int_t /*compress*/ = 1,
-                               Int_t /*netopt*/ = 0);
+                               Int_t /*netopt*/ = 0) {return 0;}
   virtual void        Paint(Option_t *option="");
   virtual void        Print(Option_t *option="") const;
-  virtual void        Purge(Short_t /*nkeep*/=1);
+  virtual void        Purge(Short_t /*nkeep*/=1) {}
   virtual void        pwd() const;
-  virtual void        ReadAll(Option_t * /*option*/="");
-  virtual Int_t       ReadKeys(Bool_t /*forceRead*/=kTRUE);
-  virtual Int_t       ReadTObject(TObject * /*obj*/, const char * /*keyname*/);
+  virtual void        ReadAll(Option_t * /*option*/="") {}
+  virtual Int_t       ReadKeys(Bool_t /*forceRead*/=kTRUE) {return 0;}
+  virtual Int_t       ReadTObject(TObject * /*obj*/, const char * /*keyname*/) {return 0;}
   virtual TObject    *Remove(TObject*);
   virtual void        RecursiveRemove(TObject *obj);
   virtual void        rmdir(const char *name);
-  virtual void        Save();
+  virtual void        Save() {}
   virtual Int_t       SaveObjectAs(const TObject * /*obj*/, const char * /*filename*/="", Option_t * /*option*/="") const;
-  virtual void        SaveSelf(Bool_t /*force*/ = kFALSE);
-  virtual void        SetBufferSize(Int_t /* bufsize */);
-  virtual void        SetModified();
-  virtual void        SetMother(TObject *mother);
+  virtual void        SaveSelf(Bool_t /*force*/ = kFALSE) {}
+  virtual void        SetBufferSize(Int_t /* bufsize */) {}
+  virtual void        SetModified() {}
+  virtual void        SetMother(TObject *mother) {fMother = (TObject*)mother;}
   virtual void        SetName(const char* newname);
-  virtual void        SetTRefAction(TObject * /*ref*/, TObject * /*parent*/);
-  virtual void        SetSeekDir(Long64_t);
-  virtual void        SetWritable(Bool_t);
-  virtual Int_t       Sizeof() const;
-  virtual Int_t       Write(const char * /*name*/=0, Int_t /*opt*/=0, Int_t /*bufsize*/=0);
-  virtual Int_t       Write(const char * /*name*/=0, Int_t /*opt*/=0, Int_t /*bufsize*/=0) const;
+  virtual void        SetTRefAction(TObject * /*ref*/, TObject * /*parent*/) {}
+  virtual void        SetSeekDir(Long64_t) {}
+  virtual void        SetWritable(Bool_t) {}
+  virtual Int_t       Sizeof() const {return 0;}
+  virtual Int_t       Write(const char * /*name*/=0, Int_t /*opt*/=0, Int_t /*bufsize*/=0){return 0;}
+  virtual Int_t       Write(const char * /*name*/=0, Int_t /*opt*/=0, Int_t /*bufsize*/=0) const {return 0;}
   virtual Int_t       WriteTObject(const TObject *obj, const char *name =0, Option_t * /*option*/="", Int_t /*bufsize*/ =0);
-  template <class T> inline Int_t WriteObject(const T* obj, const char* name, Option_t *option="", Int_t bufsize=0);
-  virtual Int_t       WriteObjectAny(const void *, const char * /*classname*/, const char * /*name*/, Option_t * /*option*/="", Int_t /*bufsize*/ =0);
-  virtual Int_t       WriteObjectAny(const void *, const TClass * /*cl*/, const char * /*name*/, Option_t * /*option*/="", Int_t /*bufsize*/ =0);
-  virtual void        WriteDirHeader();
-  virtual void        WriteKeys();
+private:
+  Int_t       WriteObject(void *obj, const char* name, Option_t *option="", Int_t bufsize=0); // Intentionaly not implemented.
+public:
+  template <class T> inline Int_t WriteObject(const T* obj, const char* name, Option_t *option="", Int_t bufsize=0) // see TDirectory::WriteTObject or TDirectoryWriteObjectAny for explanation
+  {
+    return WriteObjectAny(obj,TBuffer::GetClass(typeid(T)),name,option,bufsize);
+  }
+  virtual Int_t       WriteObjectAny(const void *, const char * /*classname*/, const char * /*name*/, Option_t * /*option*/="", Int_t /*bufsize*/ =0) {return 0;}
+  virtual Int_t       WriteObjectAny(const void *, const TClass * /*cl*/, const char * /*name*/, Option_t * /*option*/="", Int_t /*bufsize*/ =0) {return 0;}
+  virtual void        WriteDirHeader() {}
+  virtual void        WriteKeys() {}
 
   static Bool_t       Cd(const char *path);
-  static void         DecodeNameCycle(const char *namecycle, char *name, Short_t &cycle);
+  static void         DecodeNameCycle(const char *namecycle, char *name, Short_t &cycle, const size_t namesize = 0);
   static void         EncodeNameCycle(char *buffer, const char *name, Short_t cycle);
 };
 
 
 %nodefault;
-class TROOT : public TDirectory
-{
+class TROOT : public TDirectory {
+
+  friend class TCling;
+  friend TROOT *ROOT::Internal::GetROOT2();
+
+protected:
+  typedef std::atomic<TListOfEnums*> AListOfEnums_t;
+
+  TString         fConfigOptions;        //ROOT ./configure set build options
+  TString         fConfigFeatures;       //ROOT ./configure detected build features
+  TString         fVersion;              //ROOT version (from CMZ VERSQQ) ex 0.05/01
+  Int_t           fVersionInt;           //ROOT version in integer format (501)
+  Int_t           fVersionCode;          //ROOT version code as used in RVersion.h
+  Int_t           fVersionDate;          //Date of ROOT version (ex 951226)
+  Int_t           fVersionTime;          //Time of ROOT version (ex 1152)
+  Int_t           fBuiltDate;            //Date of ROOT built
+  Int_t           fBuiltTime;            //Time of ROOT built
+  TString         fGitCommit;            //Git commit SHA1 of built
+  TString         fGitBranch;            //Git branch
+  TString         fGitDate;              //Date and time when make was run
+  Int_t           fTimer;                //Timer flag
+  std::atomic<TApplication*> fApplication;  //Pointer to current application
+  TInterpreter    *fInterpreter;         //Command interpreter
+  Bool_t          fBatch;                //True if session without graphics
+  Bool_t          fEditHistograms;       //True if histograms can be edited with the mouse
+  Bool_t          fFromPopUp;            //True if command executed from a popup menu
+  Bool_t          fMustClean;            //True if object destructor scans canvases
+  Bool_t          fReadingObject;        //True while reading an object [Deprecated (will be removed in next release)
+  Bool_t          fForceStyle;           //Force setting of current style when reading objects
+  Bool_t          fInterrupt;            //True if macro should be interrupted
+  Bool_t          fEscape;               //True if ESC has been pressed
+  Bool_t          fExecutingMacro;       //True while executing a TMacro
+  Int_t           fEditorMode;           //Current Editor mode
+  const TObject   *fPrimitive;           //Currently selected primitive
+  TVirtualPad     *fSelectPad;           //Currently selected pad
+  TCollection     *fClasses;             //List of classes definition
+  TCollection     *fTypes;               //List of data types definition
+  TListOfFunctionTemplates *fFuncTemplate; //List of global function templates
+  TListOfDataMembers*fGlobals;             //List of global variables
+  TListOfFunctions*fGlobalFunctions;     //List of global functions
+  TSeqCollection  *fClosedObjects;       //List of closed objects from the list of files and sockets, so we can delete them if neededCl.
+  TSeqCollection  *fFiles;               //List of files
+  TSeqCollection  *fMappedFiles;         //List of memory mapped files
+  TSeqCollection  *fSockets;             //List of network sockets
+  TSeqCollection  *fCanvases;            //List of canvases
+  TSeqCollection  *fStyles;              //List of styles
+  TCollection     *fFunctions;           //List of analytic functions
+  TSeqCollection  *fTasks;               //List of tasks
+  TSeqCollection  *fColors;              //List of colors
+  TSeqCollection  *fGeometries;          //List of geometries
+  TSeqCollection  *fBrowsers;            //List of browsers
+  TSeqCollection  *fSpecials;            //List of special objects
+  TSeqCollection  *fCleanups;            //List of recursiveRemove collections
+  TSeqCollection  *fMessageHandlers;     //List of message handlers
+  TSeqCollection  *fStreamerInfo;        //List of active StreamerInfo classes
+  TCollection     *fClassGenerators;     //List of user defined class generators;
+  TSeqCollection  *fSecContexts;         //List of security contexts (TSecContext)
+  TSeqCollection  *fProofs;              //List of proof sessions
+  TSeqCollection  *fClipboard;           //List of clipbard objects
+  TSeqCollection  *fDataSets;            //List of data sets (TDSet or TChain)
+  AListOfEnums_t   fEnums;               //List of enum types
+  TProcessUUID    *fUUIDs;               //Pointer to TProcessID managing TUUIDs
+  TFolder         *fRootFolder;          //top level folder //root
+  TList           *fBrowsables;          //List of browsables
+  TPluginManager  *fPluginManager;       //Keeps track of plugin library handlers
+  TString         fCutClassName;         //Name of default CutG class in graphics editor
+  TString         fDefCanvasName;        //Name of default canvas
+
+  void           InitSystem();           //Operating System interface
+  void           InitThreads();          //Initialize threads library
+  void           InitInterpreter();      //Initialize interpreter (cling)
+  void           ReadGitInfo();          //Read Git commit SHA1 and branch name
+
+  friend class ::ROOT::Internal::TROOTAllocator;
+
+  TListOfFunctions*GetGlobalFunctions();
+
 public:
-  // TROOT(const char *name, const char *title, VoidFuncPtr_t *initfunc = 0);
-  // virtual           ~TROOT();
+
+  typedef std::vector<std::pair<std::string, int> > FwdDeclArgsToKeepCollection_t;
+
   void              AddClass(TClass *cl);
   void              AddClassGenerator(TClassGenerator *gen);
   void              Browse(TBrowser *b);
   Bool_t            ClassSaved(TClass *cl);
   void              CloseFiles();
+  void              EndOfProcessCleanups();
   virtual TObject  *FindObject(const char *name) const;
   virtual TObject  *FindObject(const TObject *obj) const;
   virtual TObject  *FindObjectAny(const char *name) const;
@@ -240,59 +350,63 @@ public:
   const char       *FindObjectClassName(const char *name) const;
   const char       *FindObjectPathName(const TObject *obj) const;
   TClass           *FindSTLClass(const char *name, Bool_t load, Bool_t silent = kFALSE) const;
-  void              ForceStyle(Bool_t force = kTRUE) ;
-  Bool_t            FromPopUp() const ;
-  TPluginManager   *GetPluginManager() const ;
-  TApplication     *GetApplication() const ;
-  TInterpreter     *GetInterpreter() const ;
+  void              ForceStyle(Bool_t force = kTRUE) { fForceStyle = force; }
+  Bool_t            FromPopUp() const { return fFromPopUp; }
+  TPluginManager   *GetPluginManager() const { return fPluginManager; }
+  TApplication     *GetApplication() const { return fApplication; }
+  TInterpreter     *GetInterpreter() const { return fInterpreter; }
   TClass           *GetClass(const char *name, Bool_t load = kTRUE, Bool_t silent = kFALSE) const;
   TClass           *GetClass(const type_info &typeinfo, Bool_t load = kTRUE, Bool_t silent = kFALSE) const;
   TColor           *GetColor(Int_t color) const;
-  const char       *GetConfigOptions() const ;
-  const char       *GetConfigFeatures() const ;
-  const char       *GetCutClassName() const ;
-  const char       *GetDefCanvasName() const ;
-  Bool_t            GetEditHistograms() const ;
-  Int_t             GetEditorMode() const ;
-  Bool_t            GetForceStyle() const ;
-  Int_t             GetBuiltDate() const ;
-  Int_t             GetBuiltTime() const ;
-  Int_t             GetSvnRevision() const ;
-  const char       *GetSvnBranch() const ;
-  const char       *GetSvnDate();
-  Int_t             GetVersionDate() const ;
-  Int_t             GetVersionTime() const ;
-  Int_t             GetVersionInt() const ;
-  Int_t             GetVersionCode() const ;
-  const char       *GetVersion() const ;
-  TCollection      *GetListOfClasses() const ;
-  TSeqCollection   *GetListOfColors() const ;
+  const char       *GetConfigOptions() const { return fConfigOptions; }
+  const char       *GetConfigFeatures() const { return fConfigFeatures; }
+  const char       *GetCutClassName() const { return fCutClassName; }
+  const char       *GetDefCanvasName() const { return fDefCanvasName; }
+  Bool_t            GetEditHistograms() const { return fEditHistograms; }
+  Int_t             GetEditorMode() const { return fEditorMode; }
+  Bool_t            GetForceStyle() const { return fForceStyle; }
+  Int_t             GetBuiltDate() const { return fBuiltDate; }
+  Int_t             GetBuiltTime() const { return fBuiltTime; }
+  const char       *GetGitCommit() const { return fGitCommit; }
+  const char       *GetGitBranch() const { return fGitBranch; }
+  const char       *GetGitDate();
+  Int_t             GetVersionDate() const { return fVersionDate; }
+  Int_t             GetVersionTime() const { return fVersionTime; }
+  Int_t             GetVersionInt() const { return fVersionInt; }
+  Int_t             GetVersionCode() const { return fVersionCode; }
+  const char       *GetVersion() const { return fVersion; }
+  TCollection      *GetListOfClasses() const { return fClasses; }
+  TSeqCollection   *GetListOfColors() const { return fColors; }
   TCollection      *GetListOfTypes(Bool_t load = kFALSE);
   TCollection      *GetListOfGlobals(Bool_t load = kFALSE);
   TCollection      *GetListOfGlobalFunctions(Bool_t load = kFALSE);
-  TSeqCollection   *GetListOfClosedObjects() const ;
-  TSeqCollection   *GetListOfFiles() const       ;
-  TSeqCollection   *GetListOfMappedFiles() const ;
-  TSeqCollection   *GetListOfSockets() const     ;
-  TSeqCollection   *GetListOfCanvases() const    ;
-  TSeqCollection   *GetListOfStyles() const      ;
-  TCollection      *GetListOfFunctions() const   ;
-  TSeqCollection   *GetListOfGeometries() const  ;
-  TSeqCollection   *GetListOfBrowsers() const    ;
-  TSeqCollection   *GetListOfSpecials() const    ;
-  TSeqCollection   *GetListOfTasks() const       ;
-  TSeqCollection   *GetListOfCleanups() const    ;
-  TSeqCollection   *GetListOfStreamerInfo() const ;
-  TSeqCollection   *GetListOfMessageHandlers() const ;
-  TCollection      *GetListOfClassGenerators() const ;
-  TSeqCollection   *GetListOfSecContexts() const ;
-  TSeqCollection   *GetListOfProofs() const ;
-  TSeqCollection   *GetClipboard() const ;
-  TSeqCollection   *GetListOfDataSets() const ;
-  TList            *GetListOfBrowsables() const ;
+  TSeqCollection   *GetListOfClosedObjects() const { return fClosedObjects; }
+  TSeqCollection   *GetListOfFiles() const       { return fFiles; }
+  TSeqCollection   *GetListOfMappedFiles() const { return fMappedFiles; }
+  TSeqCollection   *GetListOfSockets() const     { return fSockets; }
+  TSeqCollection   *GetListOfCanvases() const    { return fCanvases; }
+  TSeqCollection   *GetListOfStyles() const      { return fStyles; }
+  TCollection      *GetListOfFunctions() const   { return fFunctions; }
+  TCollection      *GetListOfFunctionOverloads(const char* name) const;
+  TSeqCollection   *GetListOfGeometries() const  { return fGeometries; }
+  TSeqCollection   *GetListOfBrowsers() const    { return fBrowsers; }
+  TSeqCollection   *GetListOfSpecials() const    { return fSpecials; }
+  TSeqCollection   *GetListOfTasks() const       { return fTasks; }
+  TSeqCollection   *GetListOfCleanups() const    { return fCleanups; }
+  TSeqCollection   *GetListOfStreamerInfo() const { return fStreamerInfo; }
+  TSeqCollection   *GetListOfMessageHandlers() const { return fMessageHandlers; }
+  TCollection      *GetListOfClassGenerators() const { return fClassGenerators; }
+  TSeqCollection   *GetListOfSecContexts() const { return fSecContexts; }
+  TSeqCollection   *GetListOfProofs() const { return fProofs; }
+  TSeqCollection   *GetClipboard() const { return fClipboard; }
+  TSeqCollection   *GetListOfDataSets() const { return fDataSets; }
+  TCollection      *GetListOfEnums(Bool_t load = kFALSE);
+  TCollection      *GetListOfFunctionTemplates();
+  TList            *GetListOfBrowsables() const { return fBrowsables; }
   TDataType        *GetType(const char *name, Bool_t load = kFALSE) const;
-  TFile            *GetFile() const ;
+  TFile            *GetFile() const { if (gDirectory != this) return gDirectory->GetFile(); else return 0;}
   TFile            *GetFile(const char *name) const;
+  TFunctionTemplate*GetFunctionTemplate(const char *name);
   TStyle           *GetStyle(const char *name) const;
   TObject          *GetFunction(const char *name) const;
   TGlobal          *GetGlobal(const char *name, Bool_t load = kFALSE) const;
@@ -300,21 +414,22 @@ public:
   TFunction        *GetGlobalFunction(const char *name, const char *params = 0, Bool_t load = kFALSE);
   TFunction        *GetGlobalFunctionWithPrototype(const char *name, const char *proto = 0, Bool_t load = kFALSE);
   TObject          *GetGeometry(const char *name) const;
-  const TObject    *GetSelectedPrimitive() const ;
-  TVirtualPad      *GetSelectedPad() const ;
-  Int_t             GetNclasses() const ;
-  Int_t             GetNtypes() const ;
-  TFolder          *GetRootFolder() const ;
-  TProcessUUID     *GetUUIDs() const ;
+  const TObject    *GetSelectedPrimitive() const { return fPrimitive; }
+  TVirtualPad      *GetSelectedPad() const { return fSelectPad; }
+  Int_t             GetNclasses() const { return fClasses->GetSize(); }
+  Int_t             GetNtypes() const { return fTypes->GetSize(); }
+  TFolder          *GetRootFolder() const { return fRootFolder; }
+  TProcessUUID     *GetUUIDs() const { return fUUIDs; }
   void              Idle(UInt_t idleTimeInSec, const char *command = 0);
   Int_t             IgnoreInclude(const char *fname, const char *expandedfname);
-  Bool_t            IsBatch() const ;
-  Bool_t            IsExecutingMacro() const ;
-  Bool_t            IsFolder() const ;
-  Bool_t            IsInterrupted() const ;
-  Bool_t            IsEscaped() const ;
-  Bool_t            IsLineProcessing() const ;
-  Bool_t            IsProofServ() const ;
+  Bool_t            IsBatch() const { return fBatch; }
+  Bool_t            IsExecutingMacro() const { return fExecutingMacro; }
+  Bool_t            IsFolder() const { return kTRUE; }
+  Bool_t            IsInterrupted() const { return fInterrupt; }
+  Bool_t            IsEscaped() const { return fEscape; }
+  Bool_t            IsLineProcessing() const { return fLineIsProcessing ? kTRUE : kFALSE; }
+  Bool_t            IsProofServ() const { return fName == "proofserv" ? kTRUE : kFALSE; }
+  Bool_t            IsRootFile(const char *filename) const;
   void              ls(Option_t *option = "") const;
   Int_t             LoadClass(const char *classname, const char *libname, Bool_t check = kFALSE);
   TClass           *LoadClass(const char *name, Bool_t silent = kFALSE) const;
@@ -322,34 +437,42 @@ public:
   Long_t            Macro(const char *filename, Int_t *error = 0, Bool_t padUpdate = kTRUE);
   TCanvas          *MakeDefCanvas() const;
   void              Message(Int_t id, const TObject *obj);
-  Bool_t            MustClean() const ;
+  Bool_t            MustClean() const { return fMustClean; }
   Long_t            ProcessLine(const char *line, Int_t *error = 0);
   Long_t            ProcessLineSync(const char *line, Int_t *error = 0);
   Long_t            ProcessLineFast(const char *line, Int_t *error = 0);
-  Bool_t            ReadingObject() const ;
+  Bool_t            ReadingObject() const;
   void              RefreshBrowsers();
+  static void       RegisterModule(const char* modulename,
+                                   const char** headers,
+                                   const char** includePaths,
+                                   const char* payLoadCode,
+                                   const char* fwdDeclCode,
+                                   void (*triggerFunc)(),
+                                   const FwdDeclArgsToKeepCollection_t& fwdDeclsArgToSkip,
+                                   const char** classesHeaders);
   void              RemoveClass(TClass *);
   void              Reset(Option_t *option="");
   void              SaveContext();
-  void              SetApplication(TApplication *app) ;
-  void              SetBatch(Bool_t batch = kTRUE) ;
+  void              SetApplication(TApplication *app) { fApplication = app; }
+  void              SetBatch(Bool_t batch = kTRUE) { fBatch = batch; }
   void              SetCutClassName(const char *name = "TCutG");
-  void              SetDefCanvasName(const char *name = "c1") ;
-  void              SetEditHistograms(Bool_t flag = kTRUE) ;
+  void              SetDefCanvasName(const char *name = "c1") { fDefCanvasName = name; }
+  void              SetEditHistograms(Bool_t flag = kTRUE) { fEditHistograms = flag; }
   void              SetEditorMode(const char *mode = "");
-  void              SetExecutingMacro(Bool_t flag = kTRUE) ;
-  void              SetFromPopUp(Bool_t flag = kTRUE) ;
-  void              SetInterrupt(Bool_t flag = kTRUE) ;
-  void              SetEscape(Bool_t flag = kTRUE) ;
-  void              SetLineIsProcessing() ;
-  void              SetLineHasBeenProcessed() ;
-  void              SetReadingObject(Bool_t flag = kTRUE) ;
-  void              SetMustClean(Bool_t flag = kTRUE) ;
-  void              SetSelectedPrimitive(const TObject *obj) ;
-  void              SetSelectedPad(TVirtualPad *pad) ;
+  void              SetExecutingMacro(Bool_t flag = kTRUE) { fExecutingMacro = flag; }
+  void              SetFromPopUp(Bool_t flag = kTRUE) { fFromPopUp = flag; }
+  void              SetInterrupt(Bool_t flag = kTRUE) { fInterrupt = flag; }
+  void              SetEscape(Bool_t flag = kTRUE) { fEscape = flag; }
+  void              SetLineIsProcessing() { fLineIsProcessing++; }
+  void              SetLineHasBeenProcessed() { if (fLineIsProcessing) fLineIsProcessing--; }
+  void              SetReadingObject(Bool_t flag = kTRUE);
+  void              SetMustClean(Bool_t flag = kTRUE) { fMustClean=flag; }
+  void              SetSelectedPrimitive(const TObject *obj) { fPrimitive = obj; }
+  void              SetSelectedPad(TVirtualPad *pad) { fSelectPad = pad; }
   void              SetStyle(const char *stylename = "Default");
-  void              Time(Int_t casetime=1) ;
-  Int_t             Timer() const ;
+  void              Time(Int_t casetime=1) { fTimer = casetime; }
+  Int_t             Timer() const { return fTimer; }
 
   //---- static functions
   static Int_t       DecreaseDirLevel();
@@ -364,11 +487,11 @@ public:
   static Int_t       ConvertVersionCode2Int(Int_t code);
   static Int_t       ConvertVersionInt2Code(Int_t v);
   static Int_t       RootVersionCode();
+  static const char**&GetExtraInterpreterArgs();
+  static const char *GetTutorialsDir();
 };
 %default;
-
 
 namespace ROOT {
 TROOT *GetROOT();
 }
-

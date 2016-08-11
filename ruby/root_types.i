@@ -2,7 +2,10 @@
 /* Definitions of ROOT types                                              */
 /**************************************************************************/
 
+// Begin copy from RtypesCore.h
+
 //---- types -------------------------------------------------------------------
+
 typedef char           Char_t;      //Signed Character 1 byte (char)
 typedef unsigned char  UChar_t;     //Unsigned Character 1 byte (unsigned char)
 typedef short          Short_t;     //Signed Short integer 2 bytes (short)
@@ -27,6 +30,7 @@ typedef float          Float_t;     //Float 4 bytes (float)
 typedef float          Float16_t;   //Float 4 bytes written with a truncated mantissa
 typedef double         Double_t;    //Double 8 bytes
 typedef double         Double32_t;  //Double 8 bytes in memory, written as a 4 bytes float
+typedef long double    LongDouble_t;//Long Double
 typedef char           Text_t;      //General string (char)
 typedef bool           Bool_t;      //Boolean (0=false, 1=true) (bool)
 typedef unsigned char  Byte_t;      //Byte (8 bits) (unsigned char)
@@ -53,6 +57,8 @@ typedef short          SCoord_t;    //Screen coordinates (short)
 typedef double         Coord_t;     //Pad world coordinates (double)
 typedef float          Angle_t;     //Graphics angle (float)
 typedef float          Size_t;      //Attribute size (float)
+
+// End copy from RtypesCore.h
 
 %rename(KWhite) kWhite;
 %rename(KBlack) kBlack;
