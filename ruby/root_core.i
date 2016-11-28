@@ -4,7 +4,7 @@
 
 class TObject {
 protected:
-  void MakeZombie() { fBits |= kZombie; }
+  void MakeZombie();
   virtual void DoError(int level, const char *location, const char *fmt, va_list va) const;
 
 public:
@@ -61,7 +61,7 @@ public:
   virtual void        UseCurrentStyle();
   virtual Int_t       Write(const char *name=0, Int_t option=0, Int_t bufsize=0);
   virtual Int_t       Write(const char *name=0, Int_t option=0, Int_t bufsize=0) const;
-
+  
   //----- bit manipulation
   void     SetBit(UInt_t f, Bool_t set);
   void     SetBit(UInt_t f) { fBits |= f & kBitMask; }
@@ -69,34 +69,7 @@ public:
   Bool_t   TestBit(UInt_t f) const { return (Bool_t) ((fBits & f) != 0); }
   Int_t    TestBits(UInt_t f) const { return (Int_t) (fBits & f); }
   void     InvertBit(UInt_t f) { fBits ^= f & kBitMask; }
-
-  //---- error handling
-  virtual void     Info(const char *method, const char *msgfmt, ...) const
-#if defined(__GNUC__) && !defined(__CINT__)
-    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
-#endif
-    ;
-  virtual void     Warning(const char *method, const char *msgfmt, ...) const
-#if defined(__GNUC__) && !defined(__CINT__)
-    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
-#endif
-    ;
-  virtual void     Error(const char *method, const char *msgfmt, ...) const
-#if defined(__GNUC__) && !defined(__CINT__)
-    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
-#endif
-    ;
-  virtual void     SysError(const char *method, const char *msgfmt, ...) const
-#if defined(__GNUC__) && !defined(__CINT__)
-    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
-#endif
-    ;
-  virtual void     Fatal(const char *method, const char *msgfmt, ...) const
-#if defined(__GNUC__) && !defined(__CINT__)
-    __attribute__((format(printf, 3, 4)))   /* 1 is the this pointer */
-#endif
-    ;
-
+  
   void     AbstractMethod(const char *method) const;
   void     MayNotUse(const char *method) const;
   void     Obsolete(const char *method, const char *asOfVers, const char *removedFromVers) const;
@@ -106,10 +79,7 @@ public:
   static void      SetDtorOnly(void *obj);
   static Bool_t    GetObjectStat();
   static void      SetObjectStat(Bool_t stat);
-
-  friend class TClonesArray; // needs to reset kNotDeleted in fBits
 };
-
 
 class TNamed : public TObject {
 public:
@@ -253,89 +223,11 @@ public:
   static void         EncodeNameCycle(char *buffer, const char *name, Short_t cycle);
 };
 
-
 %nodefault;
 class TROOT : public TDirectory {
-
-  friend class TCling;
-  friend TROOT *ROOT::Internal::GetROOT2();
-
-protected:
-  typedef std::atomic<TListOfEnums*> AListOfEnums_t;
-
-  TString         fConfigOptions;        //ROOT ./configure set build options
-  TString         fConfigFeatures;       //ROOT ./configure detected build features
-  TString         fVersion;              //ROOT version (from CMZ VERSQQ) ex 0.05/01
-  Int_t           fVersionInt;           //ROOT version in integer format (501)
-  Int_t           fVersionCode;          //ROOT version code as used in RVersion.h
-  Int_t           fVersionDate;          //Date of ROOT version (ex 951226)
-  Int_t           fVersionTime;          //Time of ROOT version (ex 1152)
-  Int_t           fBuiltDate;            //Date of ROOT built
-  Int_t           fBuiltTime;            //Time of ROOT built
-  TString         fGitCommit;            //Git commit SHA1 of built
-  TString         fGitBranch;            //Git branch
-  TString         fGitDate;              //Date and time when make was run
-  Int_t           fTimer;                //Timer flag
-  std::atomic<TApplication*> fApplication;  //Pointer to current application
-  TInterpreter    *fInterpreter;         //Command interpreter
-  Bool_t          fBatch;                //True if session without graphics
-  Bool_t          fEditHistograms;       //True if histograms can be edited with the mouse
-  Bool_t          fFromPopUp;            //True if command executed from a popup menu
-  Bool_t          fMustClean;            //True if object destructor scans canvases
-  Bool_t          fReadingObject;        //True while reading an object [Deprecated (will be removed in next release)
-  Bool_t          fForceStyle;           //Force setting of current style when reading objects
-  Bool_t          fInterrupt;            //True if macro should be interrupted
-  Bool_t          fEscape;               //True if ESC has been pressed
-  Bool_t          fExecutingMacro;       //True while executing a TMacro
-  Int_t           fEditorMode;           //Current Editor mode
-  const TObject   *fPrimitive;           //Currently selected primitive
-  TVirtualPad     *fSelectPad;           //Currently selected pad
-  TCollection     *fClasses;             //List of classes definition
-  TCollection     *fTypes;               //List of data types definition
-  TListOfFunctionTemplates *fFuncTemplate; //List of global function templates
-  TListOfDataMembers*fGlobals;             //List of global variables
-  TListOfFunctions*fGlobalFunctions;     //List of global functions
-  TSeqCollection  *fClosedObjects;       //List of closed objects from the list of files and sockets, so we can delete them if neededCl.
-  TSeqCollection  *fFiles;               //List of files
-  TSeqCollection  *fMappedFiles;         //List of memory mapped files
-  TSeqCollection  *fSockets;             //List of network sockets
-  TSeqCollection  *fCanvases;            //List of canvases
-  TSeqCollection  *fStyles;              //List of styles
-  TCollection     *fFunctions;           //List of analytic functions
-  TSeqCollection  *fTasks;               //List of tasks
-  TSeqCollection  *fColors;              //List of colors
-  TSeqCollection  *fGeometries;          //List of geometries
-  TSeqCollection  *fBrowsers;            //List of browsers
-  TSeqCollection  *fSpecials;            //List of special objects
-  TSeqCollection  *fCleanups;            //List of recursiveRemove collections
-  TSeqCollection  *fMessageHandlers;     //List of message handlers
-  TSeqCollection  *fStreamerInfo;        //List of active StreamerInfo classes
-  TCollection     *fClassGenerators;     //List of user defined class generators;
-  TSeqCollection  *fSecContexts;         //List of security contexts (TSecContext)
-  TSeqCollection  *fProofs;              //List of proof sessions
-  TSeqCollection  *fClipboard;           //List of clipbard objects
-  TSeqCollection  *fDataSets;            //List of data sets (TDSet or TChain)
-  AListOfEnums_t   fEnums;               //List of enum types
-  TProcessUUID    *fUUIDs;               //Pointer to TProcessID managing TUUIDs
-  TFolder         *fRootFolder;          //top level folder //root
-  TList           *fBrowsables;          //List of browsables
-  TPluginManager  *fPluginManager;       //Keeps track of plugin library handlers
-  TString         fCutClassName;         //Name of default CutG class in graphics editor
-  TString         fDefCanvasName;        //Name of default canvas
-
-  void           InitSystem();           //Operating System interface
-  void           InitThreads();          //Initialize threads library
-  void           InitInterpreter();      //Initialize interpreter (cling)
-  void           ReadGitInfo();          //Read Git commit SHA1 and branch name
-
-  friend class ::ROOT::Internal::TROOTAllocator;
-
-  TListOfFunctions*GetGlobalFunctions();
-
 public:
-
-  typedef std::vector<std::pair<std::string, int> > FwdDeclArgsToKeepCollection_t;
-
+  // TROOT(const char *name, const char *title, VoidFuncPtr_t *initfunc = 0);
+  virtual           ~TROOT();
   void              AddClass(TClass *cl);
   void              AddClassGenerator(TClassGenerator *gen);
   void              Browse(TBrowser *b);
@@ -356,7 +248,7 @@ public:
   TApplication     *GetApplication() const { return fApplication; }
   TInterpreter     *GetInterpreter() const { return fInterpreter; }
   TClass           *GetClass(const char *name, Bool_t load = kTRUE, Bool_t silent = kFALSE) const;
-  TClass           *GetClass(const type_info &typeinfo, Bool_t load = kTRUE, Bool_t silent = kFALSE) const;
+  TClass           *GetClass(const std::type_info &typeinfo, Bool_t load = kTRUE, Bool_t silent = kFALSE) const;
   TColor           *GetColor(Int_t color) const;
   const char       *GetConfigOptions() const { return fConfigOptions; }
   const char       *GetConfigFeatures() const { return fConfigFeatures; }
@@ -443,14 +335,7 @@ public:
   Long_t            ProcessLineFast(const char *line, Int_t *error = 0);
   Bool_t            ReadingObject() const;
   void              RefreshBrowsers();
-  static void       RegisterModule(const char* modulename,
-                                   const char** headers,
-                                   const char** includePaths,
-                                   const char* payLoadCode,
-                                   const char* fwdDeclCode,
-                                   void (*triggerFunc)(),
-                                   const FwdDeclArgsToKeepCollection_t& fwdDeclsArgToSkip,
-                                   const char** classesHeaders);
+  //  static void       RegisterModule();
   void              RemoveClass(TClass *);
   void              Reset(Option_t *option="");
   void              SaveContext();
