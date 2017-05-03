@@ -56,6 +56,11 @@
 #include <TLatex.h>
 #include <TWbox.h>
 #include <TFrame.h>
+#include <TVector2.h>
+#include <TVector3.h>
+#include <TRotation.h>
+#include <TLorentzVector.h>
+#include <TLorentzRotation.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
@@ -96,6 +101,7 @@
 %include "root_legend.i"
 %include "root_text.i"
 %include "root_spline.i"
+%include "root_vector.i"
 
 #ifdef USE_MINUIT2
 %include "root_minuit2.i"
