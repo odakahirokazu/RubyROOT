@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.2.2
+- Version: 0.2.3
 - Author: Hirokazu Odaka
 
 
@@ -66,11 +66,11 @@ ROOT6 only.
 The author's developing/testing environment is as follows:
 
 - iMac 27-inch late 2015
-- macOS Sierra (10.12.1)
-- Apple LLVM version 8.0.0 (clang-800.0.42.1)
-- ruby 2.3.1p112 (2016-04-26 revision 54768)
-- ROOT 6.08/00
-- SWIG Version 3.0.10
+- macOS Sierra (10.12.5)
+- Apple LLVM version 8.1.0 (clang-802.0.42)
+- ruby 2.3.3p222 (2016-11-21 revision 56859)
+- ROOT 6.08/06
+- SWIG Version 3.0.12
 
 ### Contributions Are Welcome
 
@@ -90,12 +90,12 @@ Installation
 #### (1) C++ compliler
 
 #### (2) [CMake](http://www.cmake.org/)
-*version 3.0.10 or later*
+*version 3.8 or later*
 
 This package uses CMake (Cross platform make) for easy installation.
 
 #### (3) [Ruby](http://www.ruby-lang.org/en/)
-*version 2.3.1 or later*
+*version 2.3.1 or later, but version 2.4 won't work*
 
 #### (4) [SWIG](http://www.swig.org/)
 *version 3.0.10 or later*
@@ -125,17 +125,14 @@ is as follows.
 
 #### (3) Check your Ruby version, or install Ruby.
 
-You can check your Ruby verion by `ruby -v`. OS X Mavericks (10.9) includes
-Ruby 2.0.0-p247, so you do not need to install a new version of Ruby. Go to
-Step (4).
-
-If you are using an older version, or you want to use a specific version of
-Ruby, we recommend using rbenv. [Rbenv](https://github.com/sstephenson/rbenv/)
-provides nice Ruby environemt, in which you can easily/safely choose different
-Ruby versions. It can easily introduced using Homebrew on OS X.
+If you want to use a specific version of Ruby, we recommend using rbenv.
+[Rbenv](https://github.com/sstephenson/rbenv/) provides nice Ruby environemt,
+in which you can easily/safely choose different Ruby versions.
+It can easily introduced using Homebrew on OS X.
 
     $ brew install ruby-build
     $ brew install rbenv
+    $ rbenv init
 
 To initialize rbenv, write the following line in *.bashrc* or *.zshrc*.
 
@@ -160,9 +157,9 @@ This will show like this =>
 
 Then, select the latest stable version: 2.0.0-p481, for example.
 
-    $ rbenv install 2.0.0-p481
+    $ rbenv install 2.3.3
     $ rbenv rehash
-    $ rbenv global 2.0.0-p481
+    $ rbenv global 2.3.3
 
 #### (4) Install ROOT.
 

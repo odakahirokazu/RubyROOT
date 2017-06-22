@@ -60,7 +60,9 @@ if(SWIG_FLAGS)
   set_source_files_properties(${SWIG_IF_FILE} PROPERTIES SWIG_FLAGS "${sflags}")
 endif()
 
-swig_add_module(${TARGET_EXT_LIBRARY} ruby ${SWIG_IF_FILE})
+swig_add_library(${TARGET_EXT_LIBRARY}
+  LANGUAGE ruby
+  SOURCES ${SWIG_IF_FILE})
 swig_link_libraries(${TARGET_EXT_LIBRARY}
   ${RUBY_LIBRARY}
   ${RUBY_EXT_LIBRARIES})
@@ -79,11 +81,17 @@ set_target_properties(${TARGET_EXT_LIBRARY}
   )
 
 ### install setting
+if(NOT EXT_LIB_INSTALL_DESTINATION)
+  set(EXT_LIB_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/ruby)
+endif()
+
 install(TARGETS ${TARGET_EXT_LIBRARY}
   LIBRARY
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/ruby)
+  DESTINATION ${EXT_LIB_INSTALL_DESTINATION}
+  )
 
 if(ADDITIONAL_INSTALL_TARGET)
   install(FILES ${ADDITIONAL_INSTALL_TARGET}
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/ruby)
+    DESTINATION ${EXT_LIB_INSTALL_DESTINATION}
+    )
 endif()
