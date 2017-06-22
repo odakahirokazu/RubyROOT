@@ -149,13 +149,13 @@ This will show like this =>
       1.8.6-p420
       1.8.7-p249
       ...
-      2.0.0-p353
-      2.0.0-p451
-      2.0.0-p481
-      2.0.0-preview1
+      2.3.0
+      2.3.1
+      2.3.2
+      2.3.3
       ...
 
-Then, select the latest stable version: 2.0.0-p481, for example.
+Then, select the latest stable version: 2.3.3, for example.
 
     $ rbenv install 2.3.3
     $ rbenv rehash
@@ -180,6 +180,10 @@ Then, select the latest stable version: 2.0.0-p481, for example.
 
 By default, `CMAKE_INSTALL_PREFIX` is set to `$HOME`; the ruby extention
 library will be installed in `$HOME/lib/ruby`.
+You may use following options:
+- ENABLE_MINUIT2 (enable Minuit2, default=ON)
+
+After successful cmake, just do make and make install.
 
     $ make
     $ make install
@@ -562,6 +566,16 @@ For version 2.0.0-p451, I needed to set RUBY_CONFIGURE_OPTS like this:
 This workaround forces ruby-build to use readline provided by OS X system,
 which is actually libedit (readline compatible library).
 This problem seems to be resolved in version 2.0.0-p481.
+
+#### I failed to build RubyROOT, the error message says something about Minuit2.
+
+In the default setting, RubyROOT requires Minuit2 with ROOT. If you did not
+set minuit2 enabled (via --enable-minuit2 option) when you installed ROOT,
+use cmake option -DENABLE_MINUIT2=OFF at RubyROOT's cmake as follows:
+
+    cmake ../RubyROOT -DENABLE_MINUIT2=OFF <other options>
+
+Note that homebrew formula of ROOT6 normally sets minuit2 enabled.
 
 ### Data Analysis using RubyROOT
 
