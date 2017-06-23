@@ -34,10 +34,11 @@ endif()
 set(ROOT_INC_DIR ${ROOT_INCLUDE_DIRS})
 set(ROOT_LIB_DIR ${ROOT_LIBRARY_DIR})
 set(ROOT_LIB ${ROOT_LIBRARIES})
+list(APPEND CMAKE_INSTALL_RPATH ${ROOT_LIB_DIR})
 message("-- ROOTSYS = ${ROOTSYS}")
 message("-- ROOT_INC_DIR = ${ROOT_INC_DIR}")
 message("-- ROOT_LIB_DIR = ${ROOT_LIB_DIR}")
-list(APPEND CMAKE_INSTALL_RPATH ${ROOT_LIB_DIR})
+message("-- ROOT libraries = ${ROOT_LIB}")
 
 ### subdirecties
 add_subdirectory(ruby)
