@@ -44,7 +44,7 @@ public:
   
   ~RubyIMultiGenFunction() {}
 
-  IBaseFunctionMultiDim* Clone() const
+  ROOT::Math::IBaseFunctionMultiDim* Clone() const
   { return new RubyIMultiGenFunction(*this); }
   
   unsigned int NDim() const { return num_x; }
