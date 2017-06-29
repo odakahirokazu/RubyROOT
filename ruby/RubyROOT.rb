@@ -561,6 +561,12 @@ module Root
     end
   end
 
+  class TVirtualPad
+    def get_palette()
+      self.GetPrimitive("palette").auto_cast
+    end
+  end
+
   class TCanvas
     def self.create_square(size=600, name='c1', title='c1')
       wx = size+4
