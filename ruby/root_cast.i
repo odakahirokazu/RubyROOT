@@ -51,3 +51,4 @@
 %template(castIntoTSpline) castInto<TSpline>;
 %template(castIntoTSpline3) castInto<TSpline3>;
 %template(castIntoTSpline5) castInto<TSpline5>;
+%template(castIntoTPaletteAxis) castInto<TPaletteAxis>;

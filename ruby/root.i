@@ -17,6 +17,7 @@
 #include <TObjArray.h>
 #include <TMap.h>
 #include <TAxis.h>
+#include <TPaletteAxis.h>
 #include <TApplication.h>
 #include <TRint.h>
 #include <TH1.h>
@@ -83,13 +84,14 @@
 %include "root_math.i"
 %include "root_list.i"
 %include "root_attributes.i"
+%include "root_graf.i"
+%include "root_pave.i"
 %include "root_axis.i"
 %include "root_app.i"
 %include "root_hist.i"
 %include "root_hist2d.i"
 %include "root_hist3d.i"
 %include "root_tree.i"
-%include "root_graf.i"
 %include "root_graph.i"
 %include "root_func.i"
 %include "root_file.i"
