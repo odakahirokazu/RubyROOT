@@ -29,8 +29,10 @@ c1.Update
 
 # Move color palette
 palette = Root::gPad.get_palette()
-palette.SetX1NDC(0.5)
+palette.SetX1NDC(0.7)
 palette.SetY1NDC(0.5)
+palette.SetX2NDC(0.9)
+palette.SetY2NDC(0.9)
 h.Draw 'colz'
 c1.Update
 
