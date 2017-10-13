@@ -20,6 +20,10 @@ message("-- Install destination prefix: ${CMAKE_INSTALL_PREFIX}")
 set(CMAKE_MODULE_PATH ${RubyROOT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions("-std=c++11")
 
+## this is a workaround for OX X High Sierra (or Clang v9)
+## to avoid defining isfinite macro in ruby/missing.h
+add_definitions("-DHAVE_ISFINITE")
+
 ### Options
 option(ENABLE_MINUIT2 "enable Munuit2" ON)
 

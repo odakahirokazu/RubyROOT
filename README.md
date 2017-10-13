@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.2.4
+- Version: 0.2.5
 - Author: Hirokazu Odaka
 
 
@@ -67,10 +67,11 @@ ROOT6 only.
 The author's developing/testing environment is as follows:
 
 - iMac 27-inch late 2015
-- macOS Sierra (10.12.5)
-- Apple LLVM version 8.1.0 (clang-802.0.42)
-- ruby 2.3.3p222 (2016-11-21 revision 56859)
-- ROOT 6.08/06
+- macOS Sierra (10.12.6)
+- Apple LLVM version 9.0.0 (clang-900.0.37)
+- CMake 3.9.4
+- ruby 2.4.2p198 (2017-09-14 revision 59899)
+- ROOT 6.10/06
 - SWIG Version 3.0.12
 
 ### Contributions Are Welcome
