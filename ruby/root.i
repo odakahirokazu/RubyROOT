@@ -49,6 +49,7 @@
 #include <TBox.h>
 #include <TEllipse.h>
 #include <TArrow.h>
+#include <TMarker.h>
 #include <TPave.h>
 #include <TLegend.h>
 #include <TLegendEntry.h>
