@@ -376,6 +376,20 @@ public:
   TPad(const char *name, const char *title, Double_t xlow,
        Double_t ylow, Double_t xup, Double_t yup,
        Color_t color=-1, Short_t bordersize=-1, Short_t bordermode=-2);
+
+  %extend {
+    static TPad* create()
+    {
+      return new TPad();
+    }
+
+    static TPad* create(const char *name, const char *title,
+                        Double_t xlow, Double_t ylow, Double_t xup, Double_t yup)
+    {
+      return new TPad(name, title, xlow, ylow, xup, yup);
+    }
+  }
+
   virtual ~TPad();
   void              AbsCoordinates(Bool_t set) { fAbsCoord = set; }
   Double_t          AbsPixeltoX(Int_t px) {return fAbsPixeltoXk + px*fPixeltoX;}
