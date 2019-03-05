@@ -7,6 +7,8 @@ if (NOT DEFINED TARGET_EXT_LIBRARY_OUTPUT)
   set(TARGET_EXT_LIBRARY_OUTPUT ${TARGET_EXT_LIBRARY})
 endif()
 
+cmake_policy(SET CMP0078 NEW)
+
 ### message
 message("-- CreateSwigRuby: ${TARGET_EXT_LIBRARY}")
 message("-- Output name: ${TARGET_EXT_LIBRARY_OUTPUT}")
