@@ -2,12 +2,14 @@
 ### 2013-06-02 | Hirokazu Odaka
 ###
 
+### policy
+cmake_policy(SET CMP0078 NEW)
+cmake_policy(SET CMP0086 NEW)
+
 ### pre-process
 if (NOT DEFINED TARGET_EXT_LIBRARY_OUTPUT)
   set(TARGET_EXT_LIBRARY_OUTPUT ${TARGET_EXT_LIBRARY})
 endif()
-
-cmake_policy(SET CMP0078 NEW)
 
 ### message
 message("-- CreateSwigRuby: ${TARGET_EXT_LIBRARY}")
