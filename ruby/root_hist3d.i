@@ -1,9 +1,9 @@
 // 3D-histogram
 
 %nodefault;
-class TH3 : public TH1 /*, public TAtt3D */
-{
+class TH3 : public TH1 /* , public TAtt3D */ {
 public:
+  virtual ~TH3();
   virtual Int_t    BufferEmpty(Int_t action=0);
   virtual void     Copy(TObject &hnew) const;
   virtual Int_t    Fill(Double_t x, Double_t y, Double_t z);
@@ -18,44 +18,44 @@ public:
   
   virtual void     FillRandom(const char *fname, Int_t ntimes=5000);
   virtual void     FillRandom(TH1 *h, Int_t ntimes=5000);
-  virtual Int_t    FindFirstBinAbove(Double_t threshold=0, Int_t axis=1) const;
-  virtual Int_t    FindLastBinAbove (Double_t threshold=0, Int_t axis=1) const;
   virtual void     FitSlicesZ(TF1 *f1=0,Int_t binminx=1, Int_t binmaxx=0,Int_t binminy=1, Int_t binmaxy=0,
                               Int_t cut=0 ,Option_t *option="QNR"); // *MENU*
+  virtual Int_t    GetBin(Int_t binx, Int_t biny, Int_t binz) const;
+  virtual Double_t GetBinContent(Int_t bin) const { return TH1::GetBinContent(bin); }
+  virtual Double_t GetBinContent(Int_t bin, Int_t) const { return TH1::GetBinContent(bin); }
+  virtual Double_t GetBinContent(Int_t binx, Int_t biny, Int_t binz) const { return TH1::GetBinContent( GetBin(binx, biny, binz) ); }
   using TH1::GetBinErrorLow;
   using TH1::GetBinErrorUp;
-  virtual Double_t GetBinErrorLow(Int_t binx, Int_t biny, Int_t binz);
-  virtual Double_t GetBinErrorUp(Int_t binx, Int_t biny, Int_t binz);
+  virtual Double_t GetBinErrorLow(Int_t binx, Int_t biny, Int_t binz) { return TH1::GetBinErrorLow( GetBin(binx, biny, binz) ); }
+  virtual Double_t GetBinErrorUp(Int_t binx, Int_t biny, Int_t binz)  { return TH1::GetBinErrorUp( GetBin(binx, biny, binz) ); }
   virtual Double_t GetBinWithContent3(Double_t c, Int_t &binx, Int_t &biny, Int_t &binz, Int_t firstx=0, Int_t lastx=0,Int_t firsty=0, Int_t lasty=0, Int_t firstz=0, Int_t lastz=0, Double_t maxdiff=0) const;
   virtual Double_t GetCorrelationFactor(Int_t axis1=1,Int_t axis2=2) const;
   virtual Double_t GetCovariance(Int_t axis1=1,Int_t axis2=2) const;
   virtual void     GetRandom3(Double_t &x, Double_t &y, Double_t &z);
   virtual void     GetStats(Double_t *stats) const;
   virtual Double_t Integral(Option_t *option="") const;
-  using TH1::Integral;
   virtual Double_t Integral(Int_t binx1, Int_t binx2, Int_t biny1, Int_t biny2, Int_t binz1, Int_t binz2, Option_t *option="") const;
-  using TH1::IntegralAndError;
   virtual Double_t IntegralAndError(Int_t binx1, Int_t binx2, Int_t biny1, Int_t biny2, Int_t binz1, Int_t binz2, Double_t & err, Option_t *option="") const;
-  virtual Double_t Interpolate(Double_t x);
-  virtual Double_t Interpolate(Double_t x, Double_t y);
-  virtual Double_t Interpolate(Double_t x, Double_t y, Double_t z);
+  virtual Double_t Interpolate(Double_t x, Double_t y, Double_t z) const;
   virtual Double_t KolmogorovTest(const TH1 *h2, Option_t *option="") const;
-  virtual Long64_t Merge(TCollection *list);
-  TH1D      *ProjectionX(const char *name="_px", Int_t firstybin=0, Int_t lastybin=-1, Int_t firstzbin=0,
-                         Int_t lastzbin=-1, Option_t *option="") const; // *MENU*
-  TH1D      *ProjectionY(const char *name="_py", Int_t firstxbin=0, Int_t lastxbin=-1, Int_t firstzbin=0,
-                         Int_t lastzbin=-1, Option_t *option="") const; // *MENU*
-  TH1D      *ProjectionZ(const char *name="_pz", Int_t firstxbin=0, Int_t lastxbin=-1, Int_t firstybin=0,
-                         Int_t lastybin=-1, Option_t *option="") const; // *MENU*
-  TH1       *Project3D(Option_t *option="x") const; // *MENU*
-  TProfile2D      *Project3DProfile(Option_t *option="xy") const; // *MENU*
+  virtual TH1D    *ProjectionX(const char *name="_px", Int_t iymin=0, Int_t iymax=-1, Int_t izmin=0,
+                               Int_t izmax=-1, Option_t *option="") const; // *MENU*
+  virtual TH1D    *ProjectionY(const char *name="_py", Int_t ixmin=0, Int_t ixmax=-1, Int_t izmin=0,
+                               Int_t izmax=-1, Option_t *option="") const; // *MENU*
+  virtual TH1D    *ProjectionZ(const char *name="_pz", Int_t ixmin=0, Int_t ixmax=-1, Int_t iymin=0,
+                               Int_t iymax=-1, Option_t *option="") const; // *MENU*
+  virtual TH1     *Project3D(Option_t *option="x") const; // *MENU*
+  virtual TProfile2D  *Project3DProfile(Option_t *option="xy") const; // *MENU*
   virtual void     PutStats(Double_t *stats);
   virtual TH3     *RebinX(Int_t ngroup = 2, const char *newname = "");
   virtual TH3     *RebinY(Int_t ngroup = 2, const char *newname = "");
   virtual TH3     *RebinZ(Int_t ngroup = 2, const char *newname = "");
   virtual TH3     *Rebin3D(Int_t nxgroup = 2, Int_t nygroup = 2, Int_t nzgroup = 2, const char *newname = "");
   virtual void     Reset(Option_t *option="");
-  virtual void     SetShowProjection(const char *option="xy",Int_t nbins=1);
+  virtual void      SetBinContent(Int_t bin, Double_t content);
+  virtual void      SetBinContent(Int_t bin, Int_t, Double_t content) { SetBinContent(bin, content); }
+  virtual void      SetBinContent(Int_t binx, Int_t biny, Int_t binz, Double_t content) { SetBinContent(GetBin(binx, biny, binz), content); }
+  virtual void     SetShowProjection(const char *option="xy",Int_t nbins=1);   // *MENU*
 };
 %default;
 

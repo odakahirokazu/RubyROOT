@@ -16,9 +16,10 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 ### Definition of project
 project(RubyROOT)
-message("-- Install destination prefix: ${CMAKE_INSTALL_PREFIX}")
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_MODULE_PATH ${RubyROOT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions("-std=c++11")
+
+message("-- Install destination prefix: ${CMAKE_INSTALL_PREFIX}")
 
 ## this is a workaround for OX X High Sierra (or Clang v9)
 ## to avoid defining isfinite macro in ruby/missing.h

@@ -3,7 +3,7 @@ RubyROOT
 
 Ruby binding of ROOT (CERN)
 
-- Version: 0.2.10
+- Version: 0.2.11
 - Author: Hirokazu Odaka
 
 
