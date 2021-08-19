@@ -63,6 +63,7 @@
 #include <TRotation.h>
 #include <TLorentzVector.h>
 #include <TLorentzRotation.h>
+#include <TPoint.h>
 
 #include "TreeIOHelper.hpp"
 #include "RubyFunctionObject.hpp"
