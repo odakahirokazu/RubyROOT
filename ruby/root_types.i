@@ -60,6 +60,7 @@ typedef float          Size_t;      //Attribute size (float)
 
 // End copy from RtypesCore.h
 
+// color enum, from Rtypes.h
 %rename(KWhite) kWhite;
 %rename(KBlack) kBlack;
 %rename(KGray) kGray;
@@ -78,3 +79,63 @@ typedef float          Size_t;      //Attribute size (float)
 enum EColor{ kWhite, kBlack, kGray, kRed, kGreen, kBlue,
              kYellow, kMagenta, kCyan, kOrange,
              kSpring, kTeal, kAzure, kViolet, kPink };
+
+// marker style enum, from TAttMarker.h
+%rename(KDot) kDot;
+%rename(KPlus) kPlus;
+%rename(KStar) kStar;
+%rename(KCircle) kCircle;
+%rename(KMultiply) kMultiply;
+%rename(KFullDotSmall) kFullDotSmall;
+%rename(KFullDotMedium) kFullDotMedium;
+%rename(KFullDotLarge) kFullDotLarge;
+%rename(KFullCircle) kFullCircle;
+%rename(KFullSquare) kFullSquare;
+%rename(KFullTriangleUp) kFullTriangleUp;
+%rename(KFullTriangleDown) kFullTriangleDown;
+%rename(KOpenCircle) kOpenCircle;
+%rename(KOpenSquare) kOpenSquare;
+%rename(KOpenTriangleUp) kOpenTriangleUp;
+%rename(KOpenDiamond) kOpenDiamond;
+%rename(KOpenCross) kOpenCross;
+%rename(KFullStar) kFullStar;
+%rename(KOpenStar) kOpenStar;
+%rename(KOpenTriangleDown) kOpenTriangleDown;
+%rename(KFullDiamond) kFullDiamond;
+%rename(KFullCross) kFullCross;
+%rename(KOpenDiamondCross) kOpenDiamondCross;
+%rename(KOpenSquareDiagonal) kOpenSquareDiagonal;
+%rename(KOpenThreeTriangles) kOpenThreeTriangles;
+%rename(KOctagonCross) kOctagonCross;
+%rename(KFullThreeTriangles) kFullThreeTriangles;
+%rename(KOpenFourTrianglesX) kOpenFourTrianglesX;
+%rename(KFullFourTrianglesX) kFullFourTrianglesX;
+%rename(KOpenDoubleDiamond) kOpenDoubleDiamond;
+%rename(KFullDoubleDiamond) kFullDoubleDiamond;
+%rename(KOpenFourTrianglesPlus) kOpenFourTrianglesPlus;
+%rename(KFullFourTrianglesPlus) kFullFourTrianglesPlus;
+%rename(KOpenCrossX) kOpenCrossX;
+%rename(KFullCrossX) kFullCrossX;
+%rename(KFourSquaresX) kFourSquaresX;
+%rename(KFourSquaresPlus) kFourSquaresPlus;
+enum EMarkerStyle{ kDot, kPlus, kStar, kCircle, kMultiply,
+                   kFullDotSmall, kFullDotMedium, kFullDotLarge,
+                   kFullCircle, kFullSquare, kFullTriangleUp,
+                   kFullTriangleDown, kOpenCircle, kOpenSquare,
+                   kOpenTriangleUp, kOpenDiamond, kOpenCross,
+                   kFullStar, kOpenStar, kOpenTriangleDown,
+                   kFullDiamond, kFullCross, kOpenDiamondCross,
+                   kOpenSquareDiagonal, kOpenThreeTriangles,
+                   kOctagonCross, kFullThreeTriangles,
+                   kOpenFourTrianglesX, kFullFourTrianglesX,
+                   kOpenDoubleDiamond, kFullDoubleDiamond,
+                   kOpenFourTrianglesPlus, kFullFourTrianglesPlus,
+                   kOpenCrossX, kFullCrossX, kFourSquaresX,
+                   kFourSquaresPlus };
+
+// line style enum, from TAttLine.h
+%rename(KSolid) kSolid;
+%rename(KDashed) kDashed;
+%rename(KDotted) kDotted;
+%rename(KDashDotted) kDashDotted;
+enum ELineStyle { kSolid, kDashed, kDotted, kDashDotted };
