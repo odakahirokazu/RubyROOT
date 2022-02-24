@@ -465,6 +465,16 @@ module Root
     end
   end
 
+  class TMultiGraph
+    def self.create(name=nil, title=nil)
+      if(name and title)
+        TMultiGraph.new(name,title)
+      else
+        TMultiGraph.new()
+      end
+    end
+  end
+
   class TStyle
     def set_my_style()
       SetOptStat(0)

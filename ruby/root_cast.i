@@ -43,6 +43,7 @@
 %template(castIntoTGraph) castInto<TGraph>;
 %template(castIntoTGraphErrors) castInto<TGraphErrors>;
 %template(castIntoTGraphAsymmErrors) castInto<TGraphAsymmErrors>;
+%template(castIntoTMultiGraph) castInto<TMultiGraph>;
 %template(castIntoTDirectory) castInto<TDirectory>;
 %template(castIntoTDirectoryFile) castInto<TDirectoryFile>;
 %template(castIntoTFile) castInto<TFile>;
