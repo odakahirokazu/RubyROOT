@@ -25,7 +25,7 @@ Currently, this Ruby wapper offers the following ROOT classes:
 TApplication, TArrow, TAttAxis, TAttBBox2D, TAttFill, TAttLine,
 TAttMarker, TAttPad, TAttText, TAxis, TBox, TBranch, TCanvas,
 TChain, TCollection, TColor, TDirectory, TDirectoryFile, TEllipse,
-TF1, TFile, TFormula, TGraph, TGraphAsymmErrors, TGraphErrors,
+TF1, TFile, TFormula, TGraph, TGraphAsymmErrors, TGraphErrors, TMultiGraph
 TH1, TH1C, TH1D, TH1F, TH1I, TH1S, TH2, TH2C, TH2D, TH2F, TH2I,
 TH2S, TH3, TH3C, TH3D, TH3F, TH3I, TH3S, TKey, TLatex, TLeaf,
 TLegend, TLine, TList, TLorentzRotation, TLorentzVector, TMap,
