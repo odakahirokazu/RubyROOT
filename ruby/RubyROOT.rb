@@ -623,7 +623,7 @@ module RootUtil
     def draw(name, wx, wy, margin=50)
       numPlot = @graph_list.size
       canvasHeight = wy*numPlot+2*margin
-      @canvas = Root::TCanvas.create(name, '', wx, canvasHeight)
+      @canvas = Root::TCanvas.create(name, name, wx, canvasHeight)
       RootUtil::gStyle.set_my_style()
       small = 1e-5
       @canvas.Divide(1, numPlot, small, small)
