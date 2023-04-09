@@ -92,21 +92,21 @@ Installation
 #### (1) C++ compliler
 
 #### (2) [CMake](http://www.cmake.org/)
-*version 3.8 or later*
+*version 3.20 or later*
 
 This package uses CMake (Cross platform make) for easy installation.
 
 #### (3) [Ruby](http://www.ruby-lang.org/en/)
-*version 2.3.1 or later, but version 2.4 won't work*
+*version 3.2.2 or later*
 
 #### (4) [SWIG](http://www.swig.org/)
-*version 3.0.10 or later*
+*version 4.1.1 or later*
 
 SWIG (Simplified Wrapper and Interface Generator) provides an easy way to
 generate extended libraries of various scripting languages.
 
 #### (5) [ROOT](http://root.cern.ch/)
-*version 6.08/00 or later*
+*version 6.26.06 or later*
 
 A data analysis framework.
 
@@ -127,41 +127,12 @@ is as follows.
 
 #### (3) Check your Ruby version, or install Ruby.
 
-If you want to use a specific version of Ruby, we recommend using rbenv.
-[Rbenv](https://github.com/sstephenson/rbenv/) provides nice Ruby environemt,
-in which you can easily/safely choose different Ruby versions.
-It can easily introduced using Homebrew on OS X.
+    $ brew install ruby
 
-    $ brew install ruby-build
-    $ brew install rbenv
-    $ rbenv init
-
-To initialize rbenv, write the following line in *.bashrc* or *.zshrc*.
-
-    eval "$(rbenv init -)"
-
-Then, in a new shell, install Ruby as follows.
-
-    $ rbenv install -l
-
-This will show like this => 
-
-    Available versions:
-      1.8.6-p383
-      1.8.6-p420
-      1.8.7-p249
-      ...
-      2.3.0
-      2.3.1
-      2.3.2
-      2.3.3
-      ...
-
-Then, select the latest stable version: 2.3.3, for example.
-
-    $ rbenv install 2.3.3
-    $ rbenv rehash
-    $ rbenv global 2.3.3
+Add the Ruby path to the environement variable PATH. For example, add the following setting into .zshrc. (Check the Ruby path by `brew info ruby`)
+```
+    export PATH="/usr/local/opt/ruby/bin:$PATH"
+```
 
 #### (4) Install ROOT.
 
