@@ -5,8 +5,8 @@
 class TText : public TNamed, public TAttText, public TAttBBox2D {
 public:
   // TText status bits
-  %rename(KTextNDC) kTextNDC;
-  enum { kTextNDC = BIT(14) };
+  // %rename(KTextNDC) kTextNDC;
+  // enum { kTextNDC = BIT(14) };
 
   TText();
   TText(Double_t x, Double_t y, const char *text);
@@ -64,7 +64,7 @@ public:
 class TLatex : public TText, public TAttLine {
 public:
   // TLatex status bits
-  enum { kTextNDC = BIT(14) };
+  // enum { kTextNDC = BIT(14) };
 
   TLatex();
   TLatex(Double_t x, Double_t y, const char *text);
