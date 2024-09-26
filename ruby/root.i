@@ -30,6 +30,7 @@
 #include <TGraph.h>
 #include <TGraphErrors.h>
 #include <TGraphAsymmErrors.h>
+#include <TMultiGraph.h>
 #include <TFormula.h>
 #include <TF1.h>
 #include <TFile.h>
