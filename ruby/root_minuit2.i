@@ -283,7 +283,7 @@ public:
      other parameters which is most strongly correlated with i.
      Minimizer must overload method if implemented 
   */
-  virtual double GlobalCC(unsigned int ) const ;
+  // virtual double GlobalCC(unsigned int ) const ;
 
   /**
      minos error for variable i, return false if Minos failed or not supported 
@@ -577,7 +577,7 @@ public:
      is most strongly correlated with i.
      If the variable is fixed or const the return value is zero
   */
-  virtual double GlobalCC(unsigned int i) const;
+  // virtual double GlobalCC(unsigned int i) const;
 
   /**
      get the minos error for parameter i, return false if Minos failed

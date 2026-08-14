@@ -50,10 +50,12 @@ public:
                                Double_t p5=0,Double_t p6=0,Double_t p7=0,Double_t p8=0,
                                Double_t p9=0,Double_t p10=0); // *MENU*
   void           SetParName(Int_t ipar, const char *name);
+  /*
   void           SetParNames(const char *name0="p0",const char *name1="p1",const char
                              *name2="p2",const char *name3="p3",const char
                              *name4="p4", const char *name5="p5",const char *name6="p6",const char *name7="p7",const char
                              *name8="p8",const char *name9="p9",const char *name10="p10"); // *MENU*
+  */
   void           SetVariable(const TString &name, Double_t value);
   void           SetVariables(const std::pair<TString,Double_t> *vars, const Int_t size);
 };

@@ -155,7 +155,7 @@ public:
   typedef TListIter Iterator_t;
 
   TList() : fFirst(0), fLast(0), fCache(0), fAscending(kTRUE) ;
-  TList(TObject *) : fFirst(0), fLast(0), fCache(0), fAscending(kTRUE) ; // for backward compatibility, don't use
+  // TList(TObject *) : fFirst(0), fLast(0), fCache(0), fAscending(kTRUE) ; // for backward compatibility, don't use
   virtual           ~TList();
   virtual void      Clear(Option_t *option="");
   virtual void      Delete(Option_t *option="");

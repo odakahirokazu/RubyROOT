@@ -356,7 +356,7 @@ public:
   virtual Int_t     LoadBaskets(Long64_t maxmemory);
   virtual Long64_t  LoadTree(Long64_t entry);
   void      Lookup(Bool_t force = kFALSE);
-  virtual void      Loop(Option_t *option="", Long64_t nentries=kMaxEntries, Long64_t firstentry=0); // *MENU*
+  // virtual void      Loop(Option_t *option="", Long64_t nentries=kMaxEntries, Long64_t firstentry=0); // *MENU*
   virtual void      ls(Option_t *option="") const;
   virtual Long64_t  Merge(const char *name, Option_t *option = "");
   virtual Long64_t  Merge(TCollection *list, Option_t *option = "");
@@ -395,7 +395,7 @@ public:
   virtual void      SetEventList(TEventList *evlist);
   virtual void      SetMakeClass(Int_t make) { TTree::SetMakeClass(make); if (fTree) fTree->SetMakeClass(make);}
   virtual void      SetPacketSize(Int_t size = 100);
-  virtual void      SetProof(Bool_t on = kTRUE, Bool_t refresh = kFALSE, Bool_t gettreeheader = kFALSE);
+  // virtual void      SetProof(Bool_t on = kTRUE, Bool_t refresh = kFALSE, Bool_t gettreeheader = kFALSE);
   virtual void      SetWeight(Double_t w=1, Option_t *option="");
   virtual void      UseCache(Int_t maxCacheSize = 10, Int_t pageSize = 0);
 };

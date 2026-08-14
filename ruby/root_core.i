@@ -289,7 +289,7 @@ public:
   TSeqCollection   *GetListOfMessageHandlers() const { return fMessageHandlers; }
   TCollection      *GetListOfClassGenerators() const { return fClassGenerators; }
   TSeqCollection   *GetListOfSecContexts() const { return fSecContexts; }
-  TSeqCollection   *GetListOfProofs() const { return fProofs; }
+  // TSeqCollection   *GetListOfProofs() const { return fProofs; }
   TSeqCollection   *GetClipboard() const { return fClipboard; }
   TSeqCollection   *GetListOfDataSets() const { return fDataSets; }
   TCollection      *GetListOfEnums(Bool_t load = kFALSE);
@@ -320,7 +320,7 @@ public:
   Bool_t            IsInterrupted() const { return fInterrupt; }
   Bool_t            IsEscaped() const { return fEscape; }
   Bool_t            IsLineProcessing() const { return fLineIsProcessing ? kTRUE : kFALSE; }
-  Bool_t            IsProofServ() const { return fName == "proofserv" ? kTRUE : kFALSE; }
+  // Bool_t            IsProofServ() const { return fName == "proofserv" ? kTRUE : kFALSE; }
   Bool_t            IsRootFile(const char *filename) const;
   void              ls(Option_t *option = "") const;
   Int_t             LoadClass(const char *classname, const char *libname, Bool_t check = kFALSE);
